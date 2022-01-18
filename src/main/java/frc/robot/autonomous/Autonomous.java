@@ -7,7 +7,7 @@ import frc.robot.commands.drive.DriveWait;
 import static frc.robot.autonomous.AutonomousProgram.create;
 
 public class Autonomous {
-	static {
+	public static void init() {
 		create("Drive Straight", () -> new DriveDistance(6, 1));
 		create("Drive Wait Drive",
 				() -> new SequentialCommandGroup(

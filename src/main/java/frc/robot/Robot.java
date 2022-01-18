@@ -7,19 +7,24 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.RobotMap.IOConstants;
+import frc.robot.autonomous.Autonomous;
 import frc.robot.autonomous.AutonomousProgram;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.SetDriveSpeed;
+import frc.robot.commands.led.SetLEDColor;
 import frc.robot.subsystems.DrivebaseSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class Robot extends TimedRobot {
 	/* Define Robot Subsystems */
 	public static DrivebaseSubsystem drivebase = new DrivebaseSubsystem();
+	public static LEDSubsystem ledStrip = new LEDSubsystem();
 
 	/* Robot IO Controls */
 	public static Joystick leftJoystick = new Joystick(IOConstants.LEFT_JOYSTICK_ID);
@@ -38,17 +43,28 @@ public class Robot extends TimedRobot {
 
 		/* Shuffleboard Stuff */
 
+		Autonomous.init();
 		AutonomousProgram.addAutosToShuffleboard();
 	}
 
 	private void configureButtonBindings() {
-		// Grab the hatch when the 'A' button is pressed.
-		new JoystickButton(rightJoystick, ButtonType.kTrigger.value)
-				.whenPressed(new DriveDistance(4, 1));
+		// // Drive 4 inches when right trigger pressed
+		// new JoystickButton(rightJoystick, ButtonType.kTrigger.value)
+		// 		.whenPressed(new DriveDistance(4, 1));
 
-		// While holding the shoulder button, drive at half speed
-		new JoystickButton(leftJoystick, ButtonType.kTrigger.value)
-				.whenHeld(new SetDriveSpeed(0.5));
+		// /* Change LED strip colors for buttons 1-3 */
+		// new JoystickButton(rightJoystick, 1)
+		// 		.whenPressed(new SetLEDColor(new Color(255, 0, 0)));
+
+		// new JoystickButton(rightJoystick, 2)
+		// 		.whenPressed(new SetLEDColor(new Color(0, 255, 0)));
+
+		// new JoystickButton(rightJoystick, 3)
+		// 		.whenPressed(new SetLEDColor(new Color(0, 0, 255)));
+
+		// // While holding the left trigger button, drive at half speed
+		// new JoystickButton(leftJoystick, ButtonType.kTrigger.value)
+		// 		.whenHeld(new SetDriveSpeed(0.5));
 	}
 
 	/*

@@ -3,6 +3,8 @@ package frc.robot.autonomous;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.plaf.synth.SynthStyle;
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -27,6 +29,7 @@ public class AutonomousProgram {
 
 	private AutonomousProgram(String name, AutonomousProvider provider) {
 		this.provider = provider;
+		this.name = name;
 	}
 
 	public String getName() {
@@ -71,6 +74,8 @@ public class AutonomousProgram {
 		// Add commands to the autonomous command chooser
 		for (var auto : registry.values())
 			autoChooser.addOption(auto.getName(), auto);
+
+		System.out.println(registry);
 
 		autoChooser.setDefaultOption(DO_NOTHING.getName(), DO_NOTHING);
 
