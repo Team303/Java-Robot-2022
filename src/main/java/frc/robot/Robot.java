@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -45,26 +46,28 @@ public class Robot extends TimedRobot {
 
 		Autonomous.init();
 		AutonomousProgram.addAutosToShuffleboard();
+
+		Shuffleboard.getTab("Test").add("Drive", new DriveDistance(12, 1));
 	}
 
 	private void configureButtonBindings() {
 		// // Drive 4 inches when right trigger pressed
 		// new JoystickButton(rightJoystick, ButtonType.kTrigger.value)
-		// 		.whenPressed(new DriveDistance(4, 1));
+		// 		.whenPressed(new DriveDistance(24, 1));
 
-		// /* Change LED strip colors for buttons 1-3 */
-		// new JoystickButton(rightJoystick, 1)
-		// 		.whenPressed(new SetLEDColor(new Color(255, 0, 0)));
+		/* Change LED strip colors for buttons 1-3 */
+		new JoystickButton(rightJoystick, 5)
+				.whenPressed(new SetLEDColor(new Color(255, 0, 0)));
 
-		// new JoystickButton(rightJoystick, 2)
-		// 		.whenPressed(new SetLEDColor(new Color(0, 255, 0)));
+		new JoystickButton(rightJoystick, 2)
+				.whenPressed(new SetLEDColor(new Color(0, 255, 0)));
 
-		// new JoystickButton(rightJoystick, 3)
-		// 		.whenPressed(new SetLEDColor(new Color(0, 0, 255)));
+		new JoystickButton(rightJoystick, 6)
+				.whenPressed(new SetLEDColor(new Color(0, 0, 255)));
 
 		// // While holding the left trigger button, drive at half speed
-		// new JoystickButton(leftJoystick, ButtonType.kTrigger.value)
-		// 		.whenHeld(new SetDriveSpeed(0.5));
+		new JoystickButton(leftJoystick, ButtonType.kTrigger.value)
+				.whenHeld(new SetDriveSpeed(0.5)); 
 	}
 
 	/*

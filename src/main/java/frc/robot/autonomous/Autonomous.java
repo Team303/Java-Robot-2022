@@ -11,8 +11,8 @@ public class Autonomous {
 		create("Drive Straight", () -> new DriveDistance(6, 1));
 		create("Drive Wait Drive",
 				() -> new SequentialCommandGroup(
-						new DriveDistance(6, 1),
+						new DriveDistance(12, 1),
 						new DriveWait(2),
-						new DriveDistance(6, 1)));
+						new DriveDistance(12, 1)));
 	}
 }
