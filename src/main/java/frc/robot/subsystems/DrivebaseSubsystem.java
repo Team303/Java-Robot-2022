@@ -1,6 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2022 Team 303
 
 package frc.robot.subsystems;
 
@@ -38,6 +36,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
 	public void drive(double leftSpeed, double rightSpeed) {
 		this.drive.tankDrive(leftSpeed, rightSpeed);
+	}
+
+	public void drive(double leftSpeed, double rightSpeed, boolean squareInputs) {
+		this.drive.tankDrive(leftSpeed, rightSpeed, squareInputs);
 	}
 
 	public void resetEncoders() {

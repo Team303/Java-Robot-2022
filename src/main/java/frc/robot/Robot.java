@@ -1,9 +1,8 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2022 Team 303
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
@@ -18,6 +17,7 @@ import frc.robot.autonomous.AutonomousProgram;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.SetDriveSpeed;
+import frc.robot.commands.led.LEDFade;
 import frc.robot.commands.led.SetLEDColor;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -26,6 +26,9 @@ public class Robot extends TimedRobot {
 	/* Define Robot Subsystems */
 	public static DrivebaseSubsystem drivebase = new DrivebaseSubsystem();
 	public static LEDSubsystem ledStrip = new LEDSubsystem();
+	
+	/* RoboRio Sensors */
+	public static ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
 	/* Robot IO Controls */
 	public static Joystick leftJoystick = new Joystick(IOConstants.LEFT_JOYSTICK_ID);
@@ -39,35 +42,38 @@ public class Robot extends TimedRobot {
 		// Configure the button bindings
 		configureButtonBindings();
 
+		gyro.calibrate();
+
 		// This runs if no other commands are scheduled (teleop)
 		drivebase.setDefaultCommand(new DefaultDrive());
 
 		/* Shuffleboard Stuff */
-
 		Autonomous.init();
 		AutonomousProgram.addAutosToShuffleboard();
+		Shuffleboard.getTab("Debug").add(gyro);
 
-		Shuffleboard.getTab("Test").add("Drive", new DriveDistance(12, 1));
+		Shuffleboard.getTab("Commands").add("Drive", new DriveDistance(12, 1));
 	}
 
 	private void configureButtonBindings() {
 		// // Drive 4 inches when right trigger pressed
 		// new JoystickButton(rightJoystick, ButtonType.kTrigger.value)
-		// 		.whenPressed(new DriveDistance(24, 1));
+		// .whenPressed(new DriveDistance(24, 1));
 
 		/* Change LED strip colors for buttons 1-3 */
-		new JoystickButton(rightJoystick, 5)
-				.whenPressed(new SetLEDColor(new Color(255, 0, 0)));
+		// new JoystickButton(rightJoystick, 5)
+		// 		.whenPressed(new SetLEDColor(new Color(255, 0, 0)));
 
-		new JoystickButton(rightJoystick, 2)
-				.whenPressed(new SetLEDColor(new Color(0, 255, 0)));
+		// new JoystickButton(rightJoystick, 2)
+		// 		.whenPressed(new SetLEDColor(new Color(0, 255, 0)));
 
-		new JoystickButton(rightJoystick, 6)
-				.whenPressed(new SetLEDColor(new Color(0, 0, 255)));
+		// new JoystickButton(rightJoystick, 6)
+		// 		.whenPressed(new SetLEDColor(new Color(0, 0, 255)));
 
 		// // While holding the left trigger button, drive at half speed
-		new JoystickButton(leftJoystick, ButtonType.kTrigger.value)
-				.whenHeld(new SetDriveSpeed(0.5)); 
+		// new JoystickButton(leftJoystick, ButtonType.kTrigger.value)
+		// 		.whenHeld(new LEDFade());
+
 	}
 
 	/*
@@ -98,6 +104,8 @@ public class Robot extends TimedRobot {
 		if (autonomousCommand != null) {
 			autonomousCommand.schedule();
 		}
+
+		new SetLEDColor(new Color(255, 0, 0)).schedule();
 	}
 
 	@Override
@@ -107,11 +115,20 @@ public class Robot extends TimedRobot {
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
+
+		new SetLEDColor(new Color(0, 0, 255)).schedule();
 	}
 
 	@Override
 	public void testInit() {
 		// Cancels all running commands at the start of test mode.
 		CommandScheduler.getInstance().cancelAll();
+
+		new SetLEDColor(new Color(255, 255, 0)).initialize();
+	}
+
+	@Override
+	public void disabledInit() {
+		new SetLEDColor(new Color(255, 0, 255)).initialize();
 	}
 }

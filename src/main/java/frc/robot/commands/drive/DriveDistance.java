@@ -27,7 +27,9 @@ public class DriveDistance extends CommandBase {
 
     @Override
     public void execute() {
-        Robot.drivebase.drive(-speed, -speed);
+		double error = -Robot.gyro.getRate();
+
+        Robot.drivebase.drive(speed * error, speed * -error, false);
     }
 
     @Override
