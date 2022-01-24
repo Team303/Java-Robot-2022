@@ -16,7 +16,5 @@ public class DefaultDrive extends CommandBase {
 	@Override
 	public void execute() {
 		Robot.drivebase.drive(-Robot.leftJoystick.getY(), -Robot.rightJoystick.getY());
-
-		System.out.println("Drive Default");
 	}
 }

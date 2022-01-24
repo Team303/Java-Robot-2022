@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -51,8 +52,21 @@ public class Robot extends TimedRobot {
 		Autonomous.init();
 		AutonomousProgram.addAutosToShuffleboard();
 		Shuffleboard.getTab("Debug").add(gyro);
+		
 
 		Shuffleboard.getTab("Commands").add("Drive", new DriveDistance(12, 1));
+	}
+
+	private void updateSmartDashbaord() {
+		SmartDashboard.setDefaultNumber("Left Encoder", 0);
+		SmartDashboard.setDefaultNumber("Right Encoder", 0);
+		SmartDashboard.setDefaultNumber("Gyro Angle", 0);
+		SmartDashboard.setDefaultNumber("Gyro Rate", 0);
+
+		SmartDashboard.putNumber("Left Encoder", drivebase.getLeftEncoder());
+		SmartDashboard.putNumber("Right Encoder", drivebase.getRightEncoder());
+		SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
+		SmartDashboard.putNumber("Gyro Rate", gyro.getRate());
 	}
 
 	private void configureButtonBindings() {
@@ -94,6 +108,7 @@ public class Robot extends TimedRobot {
 		 * block in order for anything in the Command-based framework to work.
 		 */
 		CommandScheduler.getInstance().run();
+		updateSmartDashbaord();
 	}
 
 	@Override

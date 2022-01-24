@@ -5,12 +5,16 @@ package frc.robot;
 public final class RobotMap {
     public static final class DrivebaseConstants {
         /* CAN IDs of the Motors on the Drive Base */
-        public static final int LEFT_MOTOR_ID = 1;
-        public static final int RIGHT_MOTOR_ID = 2;
+        public static final int LEFT_TALON_ID = 2;
+        public static final int LEFT_SPARK_ID = 3;
+        public static final int RIGHT_TALON_ID = 1;         
+        public static final int RIGHT_SPARK_ID = 4;
 
         /* Drivebase Motor Inversion */
-        public static final boolean LEFT_MOTOR_INVERTED = true;
-        public static final boolean RIGHT_MOTOR_INVERTED = false;
+        public static final boolean LEFT_TALON_INVERTED = false;
+        public static final boolean LEFT_SPARK_INVERTED = false;
+        public static final boolean RIGHT_TALON_INVERTED = true;
+        public static final boolean RIGHT_SPARK_INVERTED = true;
 
         /* Motor Encoder Calculations */
         public static final double WHEEL_DIAMTER = 6; // inches
