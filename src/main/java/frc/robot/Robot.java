@@ -22,6 +22,7 @@ import frc.robot.commands.led.LEDFade;
 import frc.robot.commands.led.SetLEDColor;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.commands.drive.DriveToAngle;
 
 public class Robot extends TimedRobot {
 	/* Define Robot Subsystems */
@@ -44,6 +45,7 @@ public class Robot extends TimedRobot {
 		configureButtonBindings();
 
 		gyro.calibrate();
+		gyro.reset();
 
 		// This runs if no other commands are scheduled (teleop)
 		drivebase.setDefaultCommand(new DefaultDrive());
@@ -86,8 +88,11 @@ public class Robot extends TimedRobot {
 
 		// // While holding the left trigger button, drive at half speed
 		// new JoystickButton(leftJoystick, ButtonType.kTrigger.value)
-		// 		.whenHeld(new LEDFade());
+		// 		.whenHeld(new LEDFade());                                                                                  
 
+		new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenPressed(new DriveToAngle(90));
+		new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenPressed(new DriveToAngle(180)); 
+                                                                                                                                                              
 	}
 
 	/*
