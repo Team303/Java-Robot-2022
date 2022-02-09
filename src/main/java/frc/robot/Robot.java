@@ -57,18 +57,23 @@ public class Robot extends TimedRobot {
 		
 
 		Shuffleboard.getTab("Commands").add("Drive", new DriveDistance(12, 1));
+		setSmartDashboard();
 	}
+	private void setSmartDashboard(){
 
-	private void updateSmartDashbaord() {
 		SmartDashboard.setDefaultNumber("Left Encoder", 0);
 		SmartDashboard.setDefaultNumber("Right Encoder", 0);
 		SmartDashboard.setDefaultNumber("Gyro Angle", 0);
 		SmartDashboard.setDefaultNumber("Gyro Rate", 0);
+		SmartDashboard.setDefaultNumber("Angle Error", 0);
+	}
+	private void updateSmartDashbaord() {
 
 		SmartDashboard.putNumber("Left Encoder", drivebase.getLeftEncoder());
 		SmartDashboard.putNumber("Right Encoder", drivebase.getRightEncoder());
 		SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
 		SmartDashboard.putNumber("Gyro Rate", gyro.getRate());
+		SmartDashboard.putNumber("Angle Error", DriveToAngle.error);
 	}
 
 	private void configureButtonBindings() {
@@ -91,7 +96,9 @@ public class Robot extends TimedRobot {
 		// 		.whenHeld(new LEDFade());                                                                                  
 
 		new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenPressed(new DriveToAngle(90));
-		new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenPressed(new DriveToAngle(180)); 
+		
+		//wait until PID is finished
+		//new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenPressed(new DriveToAngle(180)); 
                                                                                                                                                               
 	}
 
