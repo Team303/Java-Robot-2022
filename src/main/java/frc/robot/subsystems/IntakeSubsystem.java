@@ -1,16 +1,10 @@
-
+/*
 
 package frc.robot.subsystems;
-//imports com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax;
-//imports com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-//imports com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.IdleMode;
-
-//imports edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//imports frc.robot.RobotMap.Intake;
 import frc.robot.RobotMap.Intake;
 
 //imports makes a class IntakeSubsystem
@@ -41,4 +35,4 @@ public class IntakeSubsystem extends SubsystemBase {
 
     
     
-}
+}*/
