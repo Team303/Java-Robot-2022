@@ -23,11 +23,14 @@ import frc.robot.commands.led.SetLEDColor;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.commands.drive.DriveToAngle;
+import frc.robot.commands.Intake.StartIntake;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class Robot extends TimedRobot {
 	/* Define Robot Subsystems */
 	public static DrivebaseSubsystem drivebase = new DrivebaseSubsystem();
 	public static LEDSubsystem ledStrip = new LEDSubsystem();
+	public static IntakeSubsystem intake = new IntakeSubsystem();
 	
 	/* RoboRio Sensors */
 	public static ADXRS450_Gyro gyro = new ADXRS450_Gyro();
@@ -96,6 +99,7 @@ public class Robot extends TimedRobot {
 		// 		.whenHeld(new LEDFade());                                                                                  
 
 		new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenPressed(new DriveToAngle(90));
+		new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
 		
 		//wait until PID is finished
 		//new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenPressed(new DriveToAngle(180)); 
