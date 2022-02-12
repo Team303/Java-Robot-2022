@@ -23,6 +23,12 @@ public final class RobotMap {
                 / ((double) ENCODER_COUNTS_PER_REV / 512);
     }
 
+    public static final class Intake{
+        public static final int INTAKE_SPARK_ID = 5;
+        public static final boolean INTAKE_SPARK_INVERTED = false;
+        public static final double INTAKE_SPARK_SPEED = 0.75;
+    }
+
     public static final class IOConstants {
         public static final int LEFT_JOYSTICK_ID = 0;
         public static final int RIGHT_JOYSTICK_ID = 1;
