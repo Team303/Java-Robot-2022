@@ -1,4 +1,4 @@
-/*package frc.robot.commands.shooter;
+package frc.robot.commands.shooter;
 
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -24,4 +24,3 @@ public class ShootShooter extends CommandBase {
         
     }
 }
-*/

@@ -23,16 +23,16 @@ import frc.robot.commands.led.SetLEDColor;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.commands.drive.DriveToAngle;
-//import frc.robot.commands.Intake.StartIntake;
-//import frc.robot.subsystems.IntakeSubsystem;
-//import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.commands.Intake.StartIntake;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class Robot extends TimedRobot {
 	/* Define Robot Subsystems */
 	public static DrivebaseSubsystem drivebase = new DrivebaseSubsystem();
 	public static LEDSubsystem ledStrip = new LEDSubsystem();
-	//public static IntakeSubsystem intake = new IntakeSubsystem();
-	//public static ShooterSubsystem shooter = new ShooterSubsystem();
+	public static IntakeSubsystem intake = new IntakeSubsystem();
+	public static ShooterSubsystem shooter = new ShooterSubsystem();
 	
 	/* RoboRio Sensors */
 	public static ADXRS450_Gyro gyro = new ADXRS450_Gyro();

@@ -1,4 +1,4 @@
-/*package frc.robot.commands.Intake;
+package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
@@ -17,4 +17,4 @@ public class StartIntake extends CommandBase {
     public void end(){
         Robot.intake.setIntakeSpeed(0);
     }
-}*/
+}

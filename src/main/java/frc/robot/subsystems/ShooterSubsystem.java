@@ -1,4 +1,4 @@
-/*package frc.robot.subsystems;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -10,8 +10,8 @@ import frc.robot.RobotMap.Shooter;
 
 public class ShooterSubsystem extends SubsystemBase{
 
-    //private final CANSparkMax shooterSparkMax;
-    //private final CANSparkMax indexerSparkMax;
+    private final CANSparkMax shooterSparkMax;
+    private final CANSparkMax indexerSparkMax;
 
     
     
@@ -38,4 +38,4 @@ public class ShooterSubsystem extends SubsystemBase{
     public void calcPID(double speed) {
         //speed = kP * error;
     }
-}*/
+}
