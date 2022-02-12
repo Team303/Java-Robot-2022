@@ -10,7 +10,7 @@ public class DriveToAngle extends CommandBase{
     
 	
 	private double angle;
-    private static final double kP = 0.015; 
+    private double kP = 0.015; 
     private double kI = 0;
     private double kD = 0;
     private double speed;
