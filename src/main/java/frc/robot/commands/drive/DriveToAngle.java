@@ -6,14 +6,14 @@ import frc.robot.Robot;
 
 public class DriveToAngle extends CommandBase{
     
+    private static final double kP = 0.015; 
+	
     private double angle;
-    private double kP = 0.00000000005; 
     private double error; 
     
     public DriveToAngle(double angleValue) {
         angle = angleValue;
         addRequirements(Robot.drivebase);
-        
     }
 
     @Override
@@ -21,7 +21,6 @@ public class DriveToAngle extends CommandBase{
         Robot.drivebase.drive(0,0);
         Robot.gyro.reset();
     }
-
 
     @Override
     public void execute() {
@@ -43,7 +42,7 @@ public class DriveToAngle extends CommandBase{
             return true;
         }
         return false;
-        
+
     }
 
 }
