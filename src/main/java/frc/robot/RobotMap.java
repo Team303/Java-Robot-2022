@@ -29,6 +29,14 @@ public final class RobotMap {
         public static final double INTAKE_SPARK_SPEED = 0.75;
     }
 
+    public static final class Shooter{
+        public static final int SHOOTER_SPARK_ID = 6;
+        public static final int INDEXER_SPARK_ID = 7;
+
+        public static final boolean SHOOTER_SPARK_INVERTED = false;
+        public static final boolean INDEXER_SPARK_INVERTED = false;
+    }
+
     public static final class IOConstants {
         public static final int LEFT_JOYSTICK_ID = 0;
         public static final int RIGHT_JOYSTICK_ID = 1;
