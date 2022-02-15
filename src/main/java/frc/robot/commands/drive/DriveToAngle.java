@@ -1,7 +1,5 @@
 package frc.robot.commands.drive;
 
-import java.util.function.DoubleBinaryOperator;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Robot;
@@ -35,7 +33,7 @@ public class DriveToAngle extends CommandBase{
 
         speed = kP * error;
 
-        if(speed > 0.8 || speed < -0.8){
+        if(speed > 0.8 || speed < -0.8) {
             speed = 0.8 * (speed / Math.abs(speed));
             
         }
@@ -49,12 +47,8 @@ public class DriveToAngle extends CommandBase{
         //kP = 1/ (angle - error + 1);
         //kP = ((error/angle) + 0.02);
         //kP = Math.cos(2 * Math.PI / Math.toRadians(angle*4));
-        kP = Math.abs(error /2000);
+        kP = Math.abs(error / 2000);
     }
-
-
-
-
 
     @Override
     public void end(boolean interrupted){

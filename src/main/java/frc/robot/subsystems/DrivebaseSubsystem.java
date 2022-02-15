@@ -65,7 +65,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
 	public void drive(double leftSpeed, double rightSpeed) {
 		this.drive.tankDrive(leftSpeed, rightSpeed);
-		System.out.println("Drive Called");
 	}
 
 	public void drive(double leftSpeed, double rightSpeed, boolean squareInputs) {
