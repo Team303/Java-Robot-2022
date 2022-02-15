@@ -22,6 +22,7 @@ import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.SetDriveSpeed;
 import frc.robot.commands.led.LEDFade;
 import frc.robot.commands.led.SetLEDColor;
+import frc.robot.commands.led.LEDFlash;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.commands.drive.DriveToAngle;
@@ -140,7 +141,7 @@ public class Robot extends TimedRobot {
 			autonomousCommand.schedule();
 		}
 
-		new SetLEDColor(new Color(255, 0, 0)).schedule();
+		new SetLEDColor(RobotMap.LED.AUTONOMOUS_COLOR).schedule();
 	}
 
 	@Override
@@ -151,7 +152,7 @@ public class Robot extends TimedRobot {
 			autonomousCommand.cancel();
 		}
 
-		new SetLEDColor(new Color(0, 0, 255)).schedule();
+		new SetLEDColor(RobotMap.LED.TELEOP_COLOR).initialize();
 	}
 
 	@Override
@@ -164,6 +165,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
-		new SetLEDColor(new Color(255, 0, 255)).initialize();
+		new SetLEDColor(RobotMap.LED.DISABLED_COLOR).initialize();
 	}
 }

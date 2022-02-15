@@ -41,7 +41,8 @@ public class DriveToAngle extends CommandBase{
             speed = 0.8 * (speed / Math.abs(speed));
             
         }
-        Robot.drivebase.drive(speed, -speed);
+        Robot.drivebase.drive(speed, -speed);;
+        
          //(kP * error, -(kP * error)
 
     }
