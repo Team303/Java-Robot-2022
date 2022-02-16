@@ -9,6 +9,7 @@ import frc.robot.RobotMap;
 
 public class LEDFlash extends CommandBase {
 
+    //Declare Varibles
     Timer timer;
     boolean isPrimary = true;
     double period = 0.5; // 500 milliseconds
@@ -16,6 +17,7 @@ public class LEDFlash extends CommandBase {
     public LEDFlash(double period) {
         addRequirements(Robot.ledStrip);
 
+        //initialize varibles
         timer = new Timer();
         this.period = period;
     }
@@ -25,26 +27,35 @@ public class LEDFlash extends CommandBase {
     }
 
     public void execute() {
+        //check the current time
         double time = timer.get();
+        
+        //if the time is less then the period do nothing / keep same color
         if (time <= period)
             return;
         
+        //else reset the timer and turn it back on
         timer.reset();
         timer.start();
 
+        //change the color
         isPrimary = !isPrimary;
 
+
         for (var i = 0; i < Robot.ledStrip.ledBuffer.getLength(); i++) {
+            //a fancy way of saying if isPrimary is true use Flash_Primary color else use Flash_Secondary color
             Color ledColor = isPrimary ? RobotMap.LED.FLASH_PRIMARY : RobotMap.LED.FLASH_SECONDARY;
             Robot.ledStrip.ledBuffer.setLED(i, ledColor);
-            // System.out.printf("Color(%d, %d, %d)\n", (int)(ledColor.red*255),(int)(ledColor.green*255),(int)(ledColor.blue*255));
         }
 
+        // Send the data to LEDSubsytem 
         Robot.ledStrip.led.setData(Robot.ledStrip.ledBuffer);
     }
 
     public void end(boolean interupted) {
+        //stop the timer so it doesn't keep going
         timer.stop();
+        timer.reset();
     }
 
 }
