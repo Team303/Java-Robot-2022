@@ -45,6 +45,7 @@ public final class RobotMap {
     }
 
     public static final class LED {
+        public static final int LED_ID = 8;
         public static final int BUFFER_LENGTH = 60;
         public static final Color FLASH_PRIMARY = new Color(255 / 255D, 0 / 255D, 0 / 255D);
         public static final Color FLASH_SECONDARY = new Color(230 / 255D, 50 / 255D, 0 / 255D);
