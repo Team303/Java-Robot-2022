@@ -10,7 +10,7 @@ import frc.robot.RobotMap.Intake;
 //imports makes a class IntakeSubsystem
 public class IntakeSubsystem extends SubsystemBase {
 
-    //initializes a new Object for the intake motor
+    //Declares a new Object for the intake motor
     private final CANSparkMax intakeSparkMax;
     
     public IntakeSubsystem() {

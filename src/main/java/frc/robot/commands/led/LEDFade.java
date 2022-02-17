@@ -6,6 +6,7 @@ import static frc.robot.Robot.ledStrip;
 
 public class LEDFade extends CommandBase {
 
+	//declare varibles
 	int blue = 0;
 	boolean backwards = false;
 
@@ -15,25 +16,29 @@ public class LEDFade extends CommandBase {
 
 	@Override
 	public void initialize() {
-
+		//initialize varibles
 		blue = 0;
 		backwards = false;
 
+		//for each singlar LED a assign a initial color
 		for (var i = 0; i < ledStrip.ledBuffer.getLength(); i++) {
 			ledStrip.ledBuffer.setRGB(i, 0, 0, blue);
 		}
 
+		//send the color to be used by the LEDSubsystem
 		ledStrip.led.setData(ledStrip.ledBuffer);
 
 	}
 
 	@Override
 	public void execute() {
+		//checks what direction the colors are going
 		if (!backwards)
 			blue += 5;
 		else
 			blue -= 5;
 
+		//then cheks what value the led is set to (0-255) and flips direction
 		if (blue > 255) {
 			blue = 255;
 			backwards = true;
@@ -42,16 +47,20 @@ public class LEDFade extends CommandBase {
 			backwards = false;
 		}
 
+		//for each singlar LED a assign a color
 		for (var i = 0; i < ledStrip.ledBuffer.getLength(); i++) {
 			ledStrip.ledBuffer.setRGB(i, 0, 0, blue);
 		}
 
+		//send the color to be used by the LEDSubsystem
 		ledStrip.led.setData(ledStrip.ledBuffer);
 
 	}
 
 	@Override
 	public void end(boolean interrupted) {
+		
+		//At the end do it all over agin but set it all back to black/off
 		for (var i = 0; i < ledStrip.ledBuffer.getLength(); i++) {
 			ledStrip.ledBuffer.setRGB(i, 0, 0, 0);
 		}

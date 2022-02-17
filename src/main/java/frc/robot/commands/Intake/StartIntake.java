@@ -11,10 +11,12 @@ public class StartIntake extends CommandBase {
     }
 
     public void initialize(){
+        //start intake
         Robot.intake.setIntakeSpeed(Intake.INTAKE_SPARK_SPEED);
     }
 
     public void end(){
+        //stop intake
         Robot.intake.setIntakeSpeed(0);
     }
 }
