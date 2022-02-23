@@ -12,6 +12,10 @@ public final class RobotMap {
         public static final int RIGHT_TALON_ID = 1;
         public static final int RIGHT_SPARK_ID = 4;
 
+        /* Encoder CAN IDs */
+        public static final int LEFT_CANCODER_ID = 8;
+        public static final int RIGHT_CANCODER_ID = 9;
+
         /* Drivebase Motor Inversion */
         public static final boolean LEFT_TALON_INVERTED = false;
         public static final boolean LEFT_SPARK_INVERTED = false;

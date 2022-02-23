@@ -9,6 +9,7 @@ import frc.robot.RobotMap.DrivebaseConstants;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -24,6 +25,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
 	private final WPI_TalonSRX rightTalon;
 	private final CANSparkMax rightSparkMax;
 	private final MotorControllerGroup rightMotors;
+
+	/* Encoders */
+	private final CANCoder leftCanCoder;
+	private final CANCoder rightCanCoder;
+	
 
 	DifferentialDrive drive;
 
@@ -56,6 +62,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
 		/* All Together */
 
 		this.drive = new DifferentialDrive(leftMotors, rightMotors);
+
+		/* Encdoers */
+		
+		leftCanCoder = new CANCoder(DrivebaseConstants.LEFT_CANCODER_ID);
+		rightCanCoder = new CANCoder(DrivebaseConstants.RIGHT_CANCODER_ID);
 	}
 
 	@Override
@@ -72,16 +83,17 @@ public class DrivebaseSubsystem extends SubsystemBase {
 	}
 
 	public void resetEncoders() {
-		leftTalon.setSelectedSensorPosition(0, 0, 1000);
-		rightTalon.setSelectedSensorPosition(0, 0, 1000);
+		leftCanCoder.setPosition(0.0);
+		rightCanCoder.setPosition(0.0);
+		
 	}
 
 	public int getLeftEncoder() {
-		return (int) leftTalon.getSelectedSensorPosition(0);
+		return (int) leftCanCoder.getPosition();
 	}
 
 	public int getRightEncoder() {
-		return (int) -rightTalon.getSelectedSensorPosition(0);
+		return (int) -rightCanCoder.getPosition();
 	}
 
 	/**

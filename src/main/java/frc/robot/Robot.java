@@ -55,6 +55,8 @@ public class Robot extends TimedRobot {
 		gyro.calibrate();
 		gyro.reset();
 
+		drivebase.resetEncoders();
+		
 		// This runs if no other commands are scheduled (teleop)
 		drivebase.setDefaultCommand(new DefaultDrive());
 
