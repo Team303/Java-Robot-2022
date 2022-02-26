@@ -7,20 +7,20 @@ import edu.wpi.first.wpilibj.util.Color;
 public final class RobotMap {
     public static final class DrivebaseConstants {
         /* CAN IDs of the Motors on the Drive Base */
-        public static final int LEFT_TALON_ID = 2;
-        public static final int LEFT_SPARK_ID = 3;
-        public static final int RIGHT_TALON_ID = 1;
-        public static final int RIGHT_SPARK_ID = 4;
+        public static final int LEFT_FRONT_SPARK_ID = 2;
+        public static final int LEFT_BACK_SPARK_ID = 3;
+        public static final int RIGHT_FRONT_SPARK_ID = 5;
+        public static final int RIGHT_BACK_SPARK_ID = 4;
 
         /* Encoder CAN IDs */
-        public static final int LEFT_CANCODER_ID = 8;
-        public static final int RIGHT_CANCODER_ID = 9;
+        public static final int LEFT_CANCODER_ID = 1;
+        public static final int RIGHT_CANCODER_ID = 6;
 
         /* Drivebase Motor Inversion */
-        public static final boolean LEFT_TALON_INVERTED = false;
-        public static final boolean LEFT_SPARK_INVERTED = false;
-        public static final boolean RIGHT_TALON_INVERTED = true;
-        public static final boolean RIGHT_SPARK_INVERTED = true;
+        public static final boolean LEFT_FRONT_SPARK_INVERTED = false;
+        public static final boolean LEFT_BACK_SPARK_INVERTED = false;
+        public static final boolean RIGHT_FRONT_SPARK_INVERTED = true;
+        public static final boolean RIGHT_BACK_SPARK_INVERTED = true;
 
         /* Motor Encoder Calculations */
         public static final double WHEEL_DIAMTER = 6; // inches
@@ -30,14 +30,14 @@ public final class RobotMap {
     }
 
     public static final class Intake {
-        public static final int INTAKE_SPARK_ID = 5;
+        public static final int INTAKE_SPARK_ID = 6;
         public static final boolean INTAKE_SPARK_INVERTED = false;
         public static final double INTAKE_SPARK_SPEED = 0.75;
     }
 
     public static final class Shooter {
-        public static final int SHOOTER_SPARK_ID = 6;
-        public static final int INDEXER_SPARK_ID = 7;
+        public static final int SHOOTER_SPARK_ID = 7;
+        public static final int INDEXER_SPARK_ID = 8;
 
         public static final boolean SHOOTER_SPARK_INVERTED = false;
         public static final boolean INDEXER_SPARK_INVERTED = false;

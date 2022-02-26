@@ -1,6 +1,7 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.DriveWait;
@@ -40,7 +41,7 @@ public class Autonomous {
 					new DriveDistance(12, 1)));
 		create("Drive Straight and Pick Up", 
 			() -> new SequentialCommandGroup(
-					new ParallelCommandGroup(
+					new ParallelDeadlineGroup(
 						new DriveDistance(12,1), 
 						new StartIntake())));
 	}

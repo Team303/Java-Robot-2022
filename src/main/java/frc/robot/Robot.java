@@ -5,14 +5,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.math.controller.PIDController;
 
 import frc.robot.RobotMap.IOConstants;
 import frc.robot.autonomous.Autonomous;
@@ -52,6 +50,7 @@ public class Robot extends TimedRobot {
 		// Configure the button bindings
 		configureButtonBindings();
 
+		//Reset everything back to default
 		gyro.calibrate();
 		gyro.reset();
 
@@ -136,6 +135,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
+		//Chooses which auto we do from SmartDashboard 
 		autonomousCommand = AutonomousProgram.autoChooser.getSelected().construct();
 
 		// schedule the autonomous command (example)
@@ -165,6 +165,7 @@ public class Robot extends TimedRobot {
 		new SetLEDColor(new Color(255, 255, 0)).initialize();
 	}
 
+	
 	@Override
 	public void disabledInit() {
 		new SetLEDColor(RobotMap.LED.DISABLED_COLOR).initialize();

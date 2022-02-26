@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.DrivebaseConstants;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -17,13 +15,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class DrivebaseSubsystem extends SubsystemBase {
 
 	/* Left Motors */
-	private final WPI_TalonSRX leftTalon;
-	private final CANSparkMax leftSparkMax;
+	private final CANSparkMax leftFrontSparkMax;
+	private final CANSparkMax leftBackSparkMax;
 	private final MotorControllerGroup leftMotors;
 
 	/* Right Motors */
-	private final WPI_TalonSRX rightTalon;
-	private final CANSparkMax rightSparkMax;
+	private final CANSparkMax rightFrontSparkMax;
+	private final CANSparkMax rightBackSparkMax;
 	private final MotorControllerGroup rightMotors;
 
 	/* Encoders */
@@ -36,28 +34,28 @@ public class DrivebaseSubsystem extends SubsystemBase {
 	public DrivebaseSubsystem() {
 
 		/* Left Motors */
-		leftTalon = new WPI_TalonSRX(DrivebaseConstants.LEFT_TALON_ID);
-		leftSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_SPARK_ID, MotorType.kBrushed);
+		leftFrontSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_FRONT_SPARK_ID, MotorType.kBrushed); // CAN ID 2
+		leftBackSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_BACK_SPARK_ID, MotorType.kBrushed);   // CAN ID 3
 
-		leftTalon.setNeutralMode(NeutralMode.Brake);
-		leftSparkMax.setIdleMode(IdleMode.kBrake);
+		leftFrontSparkMax.setIdleMode(IdleMode.kBrake);
+		leftBackSparkMax.setIdleMode(IdleMode.kBrake);
 
-		leftTalon.setInverted(DrivebaseConstants.LEFT_TALON_INVERTED);
-		leftSparkMax.setInverted(DrivebaseConstants.LEFT_SPARK_INVERTED);
+		leftFrontSparkMax.setInverted(DrivebaseConstants.LEFT_FRONT_SPARK_INVERTED);
+		leftBackSparkMax.setInverted(DrivebaseConstants.LEFT_BACK_SPARK_INVERTED);
 
-		leftMotors = new MotorControllerGroup(leftTalon, leftSparkMax);
+		leftMotors = new MotorControllerGroup(leftFrontSparkMax, leftBackSparkMax);
 
 		/* Right Motors */
-		rightTalon = new WPI_TalonSRX(DrivebaseConstants.RIGHT_TALON_ID);
-		rightSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_SPARK_ID, MotorType.kBrushed);
+		rightFrontSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_FRONT_SPARK_ID, MotorType.kBrushed);// CAN ID 5
+		rightBackSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_BACK_SPARK_ID, MotorType.kBrushed);// CAN ID 4
 
-		rightTalon.setNeutralMode(NeutralMode.Brake);
-		rightSparkMax.setIdleMode(IdleMode.kBrake);
+		rightFrontSparkMax.setIdleMode(IdleMode.kBrake);
+		rightBackSparkMax.setIdleMode(IdleMode.kBrake);
 
-		rightTalon.setInverted(DrivebaseConstants.RIGHT_TALON_INVERTED);
-		rightSparkMax.setInverted(DrivebaseConstants.RIGHT_SPARK_INVERTED);
+		rightFrontSparkMax.setInverted(DrivebaseConstants.RIGHT_FRONT_SPARK_INVERTED);
+		rightBackSparkMax.setInverted(DrivebaseConstants.RIGHT_BACK_SPARK_INVERTED);
 
-		rightMotors = new MotorControllerGroup(rightTalon, rightSparkMax);
+		rightMotors = new MotorControllerGroup(rightFrontSparkMax, rightBackSparkMax);
 
 		/* All Together */
 
@@ -65,8 +63,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
 		/* Encdoers */
 		
-		leftCanCoder = new CANCoder(DrivebaseConstants.LEFT_CANCODER_ID);
-		rightCanCoder = new CANCoder(DrivebaseConstants.RIGHT_CANCODER_ID);
+		leftCanCoder = new CANCoder(DrivebaseConstants.LEFT_CANCODER_ID);   // CAN ID 1
+		rightCanCoder = new CANCoder(DrivebaseConstants.RIGHT_CANCODER_ID); // CAN ID 6
 	}
 
 	@Override
