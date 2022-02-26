@@ -5,6 +5,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -24,6 +25,8 @@ import frc.robot.commands.led.LEDFlash;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.commands.drive.DriveToAngle;
+import frc.robot.commands.Intake.ExtendIntake;
+import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.commands.Intake.StartIntake;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -105,6 +108,12 @@ public class Robot extends TimedRobot {
 		// 		.whenHeld(new LEDFade());                                                                                  
 
 		new JoystickButton(rightJoystick, 2).whenPressed(new DriveToAngle(90));
+		new JoystickButton(leftJoystick, 5).whenHeld(new ExtendIntake());
+		new JoystickButton(leftJoystick, 6).whenHeld(new RetractIntake());
+		 
+		
+
+
 		//new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
 		//new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenHeld();
 		//wait until PID is finished

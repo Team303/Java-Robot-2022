@@ -12,22 +12,38 @@ public class IntakeSubsystem extends SubsystemBase {
 
     //Declares a new Object for the intake motor
     private final CANSparkMax intakeSparkMax;
+    private final CANSparkMax extendSparkMax;
+
     
     public IntakeSubsystem() {
         
         // Defines CANSparkMax motor using id and motor type
         intakeSparkMax = new CANSparkMax(Intake.INTAKE_SPARK_ID, MotorType.kBrushed);
+        extendSparkMax = new CANSparkMax(Intake.EXTEND_SPARK_ID, MotorType.kBrushed);
 
         // Inverts SparkMax motor if ports are inverted
         intakeSparkMax.setInverted(Intake.INTAKE_SPARK_INVERTED);
+        extendSparkMax.setInverted(Intake.EXTEND_SPARK_INVERTED);
+        
         
         // Sets IdleMode to brake; stops immediately by sending reverse power
         intakeSparkMax.setIdleMode(IdleMode.kBrake);
+        extendSparkMax.setIdleMode(IdleMode.kBrake);
     }
     
     public void setIntakeSpeed(double speed) {
         intakeSparkMax.set(speed);
     }
+
+    public void IntakeExtend(double speed) {
+        extendSparkMax.set(speed);
+    }
+
+    public void IntakeRetract(double speed) {
+        extendSparkMax.set(-speed);
+    }
+    
+
 
 
 

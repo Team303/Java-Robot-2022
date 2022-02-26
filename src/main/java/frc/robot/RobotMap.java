@@ -33,11 +33,15 @@ public final class RobotMap {
         public static final int INTAKE_SPARK_ID = 6;
         public static final boolean INTAKE_SPARK_INVERTED = false;
         public static final double INTAKE_SPARK_SPEED = 0.75;
+
+        public static final int EXTEND_SPARK_ID = 7;
+        public static final boolean EXTEND_SPARK_INVERTED = false;
+        public static final double EXTEND_SPARK_SPEED = 0.25;
     }
 
     public static final class Shooter {
-        public static final int SHOOTER_SPARK_ID = 7;
-        public static final int INDEXER_SPARK_ID = 8;
+        public static final int SHOOTER_SPARK_ID = 8;
+        public static final int INDEXER_SPARK_ID = 9;
 
         public static final boolean SHOOTER_SPARK_INVERTED = false;
         public static final boolean INDEXER_SPARK_INVERTED = false;
