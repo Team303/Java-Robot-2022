@@ -92,10 +92,10 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Gyro Rate", gyro.getRate());
 		SmartDashboard.putNumber("Angle Error", DriveToAngle.error);
 		
-		drivebase.setDirectionOfMotors(drivebase.rightFrontSparkMax, SmartDashboard.getBoolean("Right Front Motor", DrivebaseConstants.RIGHT_FRONT_SPARK_INVERTED));
-		drivebase.setDirectionOfMotors(drivebase.rightBackSparkMax, SmartDashboard.getBoolean("Right Back Motor", DrivebaseConstants.RIGHT_BACK_SPARK_INVERTED));
-		drivebase.setDirectionOfMotors(drivebase.leftFrontSparkMax, SmartDashboard.getBoolean("Left Front Motor", DrivebaseConstants.LEFT_FRONT_SPARK_INVERTED));
-		drivebase.setDirectionOfMotors(drivebase.leftBackSparkMax, SmartDashboard.getBoolean("Left Back Motor", DrivebaseConstants.LEFT_BACK_SPARK_INVERTED));
+		drivebase.leftFrontSparkMax.setInverted(SmartDashboard.getBoolean("Right Front Motor", DrivebaseConstants.RIGHT_FRONT_SPARK_INVERTED));
+		drivebase.leftBackSparkMax.setInverted(SmartDashboard.getBoolean("Right Back Motor", DrivebaseConstants.RIGHT_BACK_SPARK_INVERTED));
+		drivebase.rightFrontSparkMax.setInverted(SmartDashboard.getBoolean("Left Front Motor", DrivebaseConstants.LEFT_FRONT_SPARK_INVERTED));
+		drivebase.rightBackSparkMax.setInverted(SmartDashboard.getBoolean("Left Back Motor", DrivebaseConstants.LEFT_BACK_SPARK_INVERTED));
 	}
 
 	private void configureButtonBindings() {
