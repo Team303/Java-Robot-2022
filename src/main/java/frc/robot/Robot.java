@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import frc.robot.RobotMap.DrivebaseConstants;
 import frc.robot.RobotMap.IOConstants;
 import frc.robot.autonomous.Autonomous;
 import frc.robot.autonomous.AutonomousProgram;
@@ -78,6 +78,11 @@ public class Robot extends TimedRobot {
 		SmartDashboard.setDefaultNumber("Gyro Angle", 0);
 		SmartDashboard.setDefaultNumber("Gyro Rate", 0);
 		SmartDashboard.setDefaultNumber("Angle Error", 0);
+
+		SmartDashboard.setDefaultBoolean("Right Front Motor", DrivebaseConstants.RIGHT_FRONT_SPARK_INVERTED);
+		SmartDashboard.setDefaultBoolean("Right Back Motor", DrivebaseConstants.RIGHT_BACK_SPARK_INVERTED);
+		SmartDashboard.setDefaultBoolean("Left Front Motor", DrivebaseConstants.LEFT_FRONT_SPARK_INVERTED);
+		SmartDashboard.setDefaultBoolean("Left Back Motor", DrivebaseConstants.LEFT_BACK_SPARK_INVERTED);
 	}
 	private void updateSmartDashbaord() {
 
@@ -86,6 +91,11 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
 		SmartDashboard.putNumber("Gyro Rate", gyro.getRate());
 		SmartDashboard.putNumber("Angle Error", DriveToAngle.error);
+		
+		drivebase.setDirectionOfMotors(drivebase.rightFrontSparkMax, SmartDashboard.getBoolean("Right Front Motor", DrivebaseConstants.RIGHT_FRONT_SPARK_INVERTED));
+		drivebase.setDirectionOfMotors(drivebase.rightBackSparkMax, SmartDashboard.getBoolean("Right Back Motor", DrivebaseConstants.RIGHT_BACK_SPARK_INVERTED));
+		drivebase.setDirectionOfMotors(drivebase.leftFrontSparkMax, SmartDashboard.getBoolean("Left Front Motor", DrivebaseConstants.LEFT_FRONT_SPARK_INVERTED));
+		drivebase.setDirectionOfMotors(drivebase.leftBackSparkMax, SmartDashboard.getBoolean("Left Back Motor", DrivebaseConstants.LEFT_BACK_SPARK_INVERTED));
 	}
 
 	private void configureButtonBindings() {

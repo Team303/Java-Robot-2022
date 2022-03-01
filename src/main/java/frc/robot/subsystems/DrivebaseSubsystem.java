@@ -15,13 +15,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class DrivebaseSubsystem extends SubsystemBase {
 
 	/* Left Motors */
-	private final CANSparkMax leftFrontSparkMax;
-	private final CANSparkMax leftBackSparkMax;
+	public final CANSparkMax leftFrontSparkMax;
+	public final CANSparkMax leftBackSparkMax;
 	private final MotorControllerGroup leftMotors;
 
 	/* Right Motors */
-	private final CANSparkMax rightFrontSparkMax;
-	private final CANSparkMax rightBackSparkMax;
+	public final CANSparkMax rightFrontSparkMax;
+	public final CANSparkMax rightBackSparkMax;
 	private final MotorControllerGroup rightMotors;
 
 	/* Encoders */
@@ -70,6 +70,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+	}
+
+	public void setDirectionOfMotors(CANSparkMax motor, boolean direction){
+		//true == forward: false == backward
+		motor.setInverted(direction);
 	}
 
 	public void drive(double leftSpeed, double rightSpeed) {
