@@ -24,7 +24,7 @@ public final class RobotMap {
 
         /* Motor Encoder Calculations */
         public static final double WHEEL_DIAMTER = 6; // inches
-        public static final int ENCODER_COUNTS_PER_REV = 256;
+        public static final int ENCODER_COUNTS_PER_REV = 4096;
         public static final double ENCODER_DISNATCE_PER_PULSE = (WHEEL_DIAMTER * Math.PI)
                 / ((double) ENCODER_COUNTS_PER_REV / 512);
     }

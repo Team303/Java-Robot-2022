@@ -15,13 +15,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class DrivebaseSubsystem extends SubsystemBase {
 
 	/* Left Motors */
-	public final CANSparkMax leftFrontSparkMax;
-	public final CANSparkMax leftBackSparkMax;
+	private final CANSparkMax leftFrontSparkMax;
+	private final CANSparkMax leftBackSparkMax;
 	private final MotorControllerGroup leftMotors;
 
 	/* Right Motors */
-	public final CANSparkMax rightFrontSparkMax;
-	public final CANSparkMax rightBackSparkMax;
+	private final CANSparkMax rightFrontSparkMax;
+	private final CANSparkMax rightBackSparkMax;
 	private final MotorControllerGroup rightMotors;
 
 	/* Encoders */
