@@ -5,7 +5,6 @@ import frc.robot.Robot;
 
 public class DriveDistance extends CommandBase {
 
-    //declare varibles
     private final double distance;
     private final double speed;
 
@@ -26,23 +25,22 @@ public class DriveDistance extends CommandBase {
     public void initialize() {
         //resets everything for accurate readings 
         Robot.drivebase.resetEncoders();
-        Robot.drivebase.drive(0, 0);
+        Robot.gyro.reset();
     }
 
     @Override
     public void execute() {
         //error is how much you are turning (aka: what you don't want)
         //this is used to correct yourself later
-		double error = -Robot.gyro.getRate();
+		double error = -Robot.gyro.getRate();// / 360;
+
+        // System.out.println("Rate: " + Robot.gyro.getRate());
+        // System.out.println("Error: " + error);
+
+        // double error = 1;
 
         //uses speed varible multiplied by error to fix any change and keep you going straight
-        Robot.drivebase.drive(speed * error, speed * -error, false);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        //when done stop the drivebase
-        Robot.drivebase.drive(0, 0);
+        Robot.drivebase.drive(speed * error, speed *  error, false);
     }
 
     @Override

@@ -16,6 +16,7 @@ public class DefaultDrive extends CommandBase {
 	@Override
 	public void execute() {
 		//Just left and right joystick values representing left and right side of robot
-		Robot.drivebase.drive(-Robot.leftJoystick.getY(), -Robot.rightJoystick.getY());
+		// FLIPPED BC IDEK
+		Robot.drivebase.drive(-Robot.rightJoystick.getY(), -Robot.leftJoystick.getY());
 	}
 }

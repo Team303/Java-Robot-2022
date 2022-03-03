@@ -33,7 +33,7 @@ ParallelDeadlineGroup
 */
 public class Autonomous {
 	public static void init() {
-		create("Drive Straight", () -> new DriveDistance(6, 1));
+		create("Drive Straight", () -> new DriveDistance(6, 1)); // TODO needs to be 93 inches for comp
 		create("Drive Wait Drive",
 			() -> new SequentialCommandGroup(
 					new DriveDistance(12, 1),

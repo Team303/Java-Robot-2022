@@ -17,8 +17,10 @@ import frc.robot.RobotMap.IOConstants;
 import frc.robot.autonomous.Autonomous;
 import frc.robot.autonomous.AutonomousProgram;
 import frc.robot.commands.drive.DefaultDrive;
+import frc.robot.commands.drive.DriveAmbient;
 import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.SetDriveSpeed;
+import frc.robot.commands.drive.ZeroEncoders;
 import frc.robot.commands.led.LEDFade;
 import frc.robot.commands.led.SetLEDColor;
 import frc.robot.commands.led.LEDFlash;
@@ -68,13 +70,16 @@ public class Robot extends TimedRobot {
 		Shuffleboard.getTab("Debug").add(gyro);
 		
 
-		Shuffleboard.getTab("Commands").add("Drive", new DriveDistance(12, 1));
+		Shuffleboard.getTab("Commands").add("Drive 2ft (1/2 power)", new DriveDistance(24, 0.5));
+		Shuffleboard.getTab("Commands").add("Reset Encoders", new ZeroEncoders());
 		setSmartDashboard();
 	}
 	private void setSmartDashboard(){
 
 		SmartDashboard.setDefaultNumber("Left Encoder", 0);
 		SmartDashboard.setDefaultNumber("Right Encoder", 0);
+		SmartDashboard.setDefaultNumber("Encoder Distance in Inches", 0);
+
 		SmartDashboard.setDefaultNumber("Gyro Angle", 0);
 		SmartDashboard.setDefaultNumber("Gyro Rate", 0);
 		SmartDashboard.setDefaultNumber("Angle Error", 0);
@@ -84,6 +89,8 @@ public class Robot extends TimedRobot {
 
 		SmartDashboard.putNumber("Left Encoder", drivebase.getLeftEncoder());
 		SmartDashboard.putNumber("Right Encoder", drivebase.getRightEncoder());
+		SmartDashboard.putNumber("Encoder Distance in Inches", drivebase.getAverageEncoderDistance());
+
 		SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
 		SmartDashboard.putNumber("Gyro Rate", gyro.getRate());
 		SmartDashboard.putNumber("Angle Error", DriveToAngle.error);
@@ -109,12 +116,22 @@ public class Robot extends TimedRobot {
 		// new JoystickButton(leftJoystick, ButtonType.kTrigger.value)
 		// 		.whenHeld(new LEDFade());                                                                                  
 
-		new JoystickButton(rightJoystick, 2).whenPressed(new DriveToAngle(90));
-		new JoystickButton(leftJoystick, 5).whenHeld(new ExtendIntake());
-		new JoystickButton(leftJoystick, 6).whenHeld(new RetractIntake());
-		 
-		
+		//run commands with joysticks
+		new JoystickButton(leftJoystick, 4).whenPressed(new DriveToAngle(45));
+		new JoystickButton(leftJoystick, 6).whenPressed(new DriveToAngle(90));
+		new JoystickButton(leftJoystick, 2).whenPressed(new DriveToAngle(180));
+		new JoystickButton(leftJoystick, 5).whenPressed(new DriveToAngle(-90));
+		new JoystickButton(leftJoystick, 3).whenPressed(new DriveToAngle(-45));
 
+		// new JoystickButton(leftJoystick, 5).whenHeld(new ExtendIntake());
+		// new JoystickButton(leftJoystick, 6).whenHeld(new RetractIntake());
+
+		new JoystickButton(rightJoystick, 2).whileHeld(new DriveAmbient(1));
+		new JoystickButton(rightJoystick, 3).whileHeld(new DriveAmbient(.75));
+		new JoystickButton(rightJoystick, 5).whileHeld(new DriveAmbient(.5));
+		
+		//reset encoders with joystick whenever
+		if(leftJoystick.getZ() <= 0) drivebase.resetEncoders();
 
 		//new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
 		//new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenHeld();

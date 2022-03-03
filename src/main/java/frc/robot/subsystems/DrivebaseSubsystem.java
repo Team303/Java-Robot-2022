@@ -100,7 +100,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 	 * @return
 	 */
 	private static double encoderUnitsToInches(double encoderUnits) {
-		return encoderUnits / DrivebaseConstants.ENCODER_DISNATCE_PER_PULSE;
+		return encoderUnits * DrivebaseConstants.ENCODER_DISNATCE_PER_PULSE;
 	}
 
 	/**

@@ -24,13 +24,13 @@ public class DriveToAngle extends CommandBase{
         this.angle = angle;
         pidcontroller = new PIDController(kP, kI, kD);
         pidcontroller.setSetpoint(angle);
+        pidcontroller.setTolerance(3);
         addRequirements(Robot.drivebase);
     }
 
     @Override
     public void initialize() {
-        //reset everything 
-        Robot.drivebase.drive(0,0);
+        Robot.drivebase.resetEncoders();
         Robot.gyro.reset();
     }
 
@@ -49,8 +49,6 @@ public class DriveToAngle extends CommandBase{
 
     @Override
     public void end(boolean interrupted){
-        //At the end set motors to 0 so you don't go over
-        Robot.drivebase.drive(0, 0);
     }
 
     @Override
