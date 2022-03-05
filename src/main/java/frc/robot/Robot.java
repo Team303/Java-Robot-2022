@@ -2,6 +2,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.RobotMap.IOConstants;
 import frc.robot.autonomous.Autonomous;
@@ -20,6 +22,7 @@ import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.commands.drive.DriveAmbient;
 import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.DriveToAngle;
+import frc.robot.commands.drive.DriveWait;
 import frc.robot.commands.drive.ZeroEncoders;
 import frc.robot.commands.led.LEDBounce;
 import frc.robot.commands.led.LEDLeftRight;
@@ -53,6 +56,7 @@ public class Robot extends TimedRobot {
 
   // The command configured to run during auto
   private Command autonomousCommand;
+  private NetworkTableEntry autoDelay = Shuffleboard.getTab("Autonomous").add("Auto Start Delay", 0).getEntry();
 
   @Override
   public void robotInit() {
@@ -79,6 +83,8 @@ public class Robot extends TimedRobot {
 	colorChooser.addOption("Blue", RobotMap.LED.BLUE);
 	colorChooser.setDefaultOption("Red", RobotMap.LED.RED);
 	Shuffleboard.getTab("Autonomous").add("Team Color Chooser", colorChooser);
+
+  
 
     /* Shuffleboard Stuff */
     Autonomous.init();
@@ -194,7 +200,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
-      autonomousCommand.schedule();
+      new SequentialCommandGroup(new DriveWait(autoDelay.getDouble(0.0)), autonomousCommand).schedule();
     }
 
     ledStrip.setDefaultCommand(new LEDBounce(colorChooser.getSelected()));
