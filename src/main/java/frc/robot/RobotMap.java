@@ -47,8 +47,8 @@ public final class RobotMap {
     }
 
     public static final class IOConstants {
-        public static final int LEFT_JOYSTICK_ID = 0;
-        public static final int RIGHT_JOYSTICK_ID = 1;
+        public static final int LEFT_JOYSTICK_ID = 1;
+        public static final int RIGHT_JOYSTICK_ID = 0;
     }
 
     public static final class LED {

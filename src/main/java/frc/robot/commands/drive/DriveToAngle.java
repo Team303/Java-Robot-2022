@@ -11,9 +11,9 @@ public class DriveToAngle extends CommandBase{
     
 	//Declaring varibles
 	private double angle;
-    private final double kP = 0.015; 
-    private final double kI = 0;
-    private final double kD = 0;
+    public static double kP = 0.01; 
+    public static double kI = 0.5;
+    public static double kD = 0;
     private double speed;
     private PIDController pidcontroller;
     public static double error; 
@@ -23,8 +23,8 @@ public class DriveToAngle extends CommandBase{
         //Initialize varibles
         this.angle = angle;
         pidcontroller = new PIDController(kP, kI, kD);
-        pidcontroller.setSetpoint(angle);
-        pidcontroller.setTolerance(3);
+        pidcontroller.setSetpoint(this.angle);
+        pidcontroller.setTolerance(2);
         addRequirements(Robot.drivebase);
     }
 
@@ -36,7 +36,6 @@ public class DriveToAngle extends CommandBase{
 
     @Override
     public void execute() {
-        
 
         // Max trun speed of 0.8 number not tested | negative angle beacsue Gyro is reversed 
         speed = MathUtil.clamp(pidcontroller.calculate(-Robot.gyro.getAngle()), -0.8, 0.8);

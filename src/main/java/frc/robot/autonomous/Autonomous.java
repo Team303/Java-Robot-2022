@@ -1,11 +1,9 @@
 package frc.robot.autonomous;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.DriveWait;
-import frc.robot.commands.drive.DriveToAngle;
 import frc.robot.commands.Intake.StartIntake;
 
 import static frc.robot.autonomous.AutonomousProgram.create;
@@ -33,16 +31,13 @@ ParallelDeadlineGroup
 */
 public class Autonomous {
 	public static void init() {
-		create("Drive Straight", () -> new DriveDistance(6, 1)); // TODO needs to be 93 inches for comp
-		create("Drive Wait Drive",
+		create("Drive Straight 1ft", () -> new DriveDistance(12, .5)); // TODO needs to be 93 inches for comp
+		create("Driven 1ft Wait 2 seconds Drive 1ft",
 			() -> new SequentialCommandGroup(
-					new DriveDistance(12, 1),
+					new DriveDistance(12, .5),
 					new DriveWait(2),
-					new DriveDistance(12, 1)));
-		create("Drive Straight and Pick Up", 
-			() -> new SequentialCommandGroup(
-					new ParallelDeadlineGroup(
-						new DriveDistance(12,1), 
-						new StartIntake())));
+					new DriveDistance(12, .5)));
+		create("Drive Forward 100 inches", () -> new DriveDistance(100, .5));
+		create("Drive Backwards 100 inches", () -> new DriveDistance(100, 0.5));
 	}
 }
