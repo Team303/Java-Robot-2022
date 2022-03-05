@@ -32,7 +32,7 @@ public class DriveDistance extends CommandBase {
     public void execute() {
         //error is how much you are turning (aka: what you don't want)
         //this is used to correct yourself later
-		double error = -Robot.gyro.getRate();// / 360;
+		double error = 1;// -Robot.gyro.getRate();// / 360;
 
         // System.out.println("Rate: " + Robot.gyro.getRate());
         // System.out.println("Error: " + error);
@@ -41,6 +41,12 @@ public class DriveDistance extends CommandBase {
 
         //uses speed varible multiplied by error to fix any change and keep you going straight
         Robot.drivebase.drive(speed * error, speed *  error, false);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        Robot.drivebase.resetEncoders();
+        Robot.gyro.reset();
     }
 
     @Override

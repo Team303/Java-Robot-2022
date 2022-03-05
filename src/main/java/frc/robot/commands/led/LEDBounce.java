@@ -10,51 +10,60 @@ import frc.robot.Robot;
 
 public class LEDBounce extends CommandBase {
 
-	private static final int LED_COUNT = 5;
-	int index = 0;
-	boolean backwards;
-	Color color;
+  private static final int LED_COUNT = 5;
+  int index = 0;
+  boolean backwards;
+  Color color;
 
-	public LEDBounce(Color color) {
-		addRequirements(Robot.ledStrip);
+  public LEDBounce(Color color) {
+    addRequirements(Robot.ledStrip);
 
-		this.color = color;
-	}
+    this.color = color;
+  }
 
-	@Override
-	public void initialize() {
-		Robot.ledStrip.clear();
-	}
+  @Override
+  public void initialize() {
+    Robot.ledStrip.clear();
+  }
 
-	@Override
-	public void execute() {
-		for (int i = 0; i < LED_COUNT; i++)
-			Robot.ledStrip.ledBuffer.setLED(index + i, new Color(0, 0, 0));
+  @Override
+  public void execute() {
+    int bufferLen = Robot.ledStrip.ledBuffer.getLength() / 2;
 
-		if (backwards) {
-			index--;
+    for (int i = 0; i < LED_COUNT; i++)
+      Robot.ledStrip.ledBuffer.setLED(index + i, new Color(0, 0, 0));
 
-			if (index <= 0)
-				backwards = false;
-		} else {
-			index++;
+    for (int i = 0; i < LED_COUNT; i++)
+      Robot.ledStrip.ledBuffer.setLED(bufferLen * 2 - index - i - 1, new Color(0, 0, 0));
 
-			if (index >= Robot.ledStrip.ledBuffer.getLength() - LED_COUNT)
-				backwards = true;
-		}
+    if (backwards) {
+      index--;
 
-		for (int i = 0; i < LED_COUNT; i++)
-			Robot.ledStrip.ledBuffer.setLED(index + i, this.color);
-		Robot.ledStrip.led.setData(Robot.ledStrip.ledBuffer);
-	}
+      if (index <= 0)
+        backwards = false;
+    } else {
+      index++;
 
-	@Override
-	public void end(boolean interrupted) {
-		Robot.ledStrip.clear();
-	}
+      if (index >= bufferLen - LED_COUNT)
+        backwards = true;
+    }
 
-	@Override
-	public boolean isFinished() {
-		return false;
-	}
+    for (int i = 0; i < LED_COUNT; i++)
+      Robot.ledStrip.ledBuffer.setLED(index + i, this.color);
+
+    for (int i = 0; i < LED_COUNT; i++)
+      Robot.ledStrip.ledBuffer.setLED(bufferLen * 2 - index - i - 1, this.color);
+
+    Robot.ledStrip.led.setData(Robot.ledStrip.ledBuffer);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    Robot.ledStrip.clear();
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

@@ -17,7 +17,7 @@ public class LEDSubsystem extends SubsystemBase {
 	public LEDSubsystem() {
 		led = new AddressableLED(LED.LED_ID); // Set to PWM port 9
 
-		ledBuffer = new AddressableLEDBuffer(106); // Buffer length of 108 LEDs
+		ledBuffer = new AddressableLEDBuffer(96); // Buffer length of 108 LEDs
 		led.setLength(ledBuffer.getLength());
 
 		led.setData(ledBuffer);

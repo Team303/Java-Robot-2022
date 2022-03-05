@@ -1,10 +1,10 @@
 package frc.robot.autonomous;
 
+import static frc.robot.autonomous.AutonomousProgram.create;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.DriveWait;
-
-import static frc.robot.autonomous.AutonomousProgram.create;
 
 /*
 Quick guide to Comand Groups
@@ -27,14 +27,41 @@ ParallelDeadlineGroup
 
 */
 public class Autonomous {
-	public static void init() {
-		create("Drive Straight 1ft", () -> new DriveDistance(12, .5)); // TODO needs to be 93 inches for comp
-		create("Driven 1ft Wait 2 seconds Drive 1ft",
-				() -> new SequentialCommandGroup(
-						new DriveDistance(12, .5),
-						new DriveWait(2),
-						new DriveDistance(12, .5)));
-		create("Drive Forward 100 inches", () -> new DriveDistance(100, 0.5));
-		create("Drive Backwards 100 inches", () -> new DriveDistance(100, 0.5));
-	}
+
+  public static void init() {
+    create("Drive Straight 1ft", () -> new DriveDistance(12, .5)); // TODO needs to be 93 inches for comp
+    create(
+      "Driven 1ft Wait 2 seconds Drive 1ft",
+      () ->
+        new SequentialCommandGroup(
+          new DriveDistance(12, .5),
+          new DriveWait(2),
+          new DriveDistance(12, .5)
+        )
+    );
+    create("Drive Forward 100 inches", () -> new DriveDistance(100, 0.5));
+    create("Drive Backwards 100 inches", () -> new DriveDistance(100, 0.5));
+    create(
+      "Drive 3ft Forwards, Ram 3ft Back, Drive 96 inches (8ft) Forwards",
+      () ->
+        new SequentialCommandGroup(
+          new DriveDistance(3 * 12, .25),
+          new DriveWait(0.5),
+          new DriveDistance(3 * 12, -1),
+          new DriveWait(1),
+          new DriveDistance(8 * 12, 0.5)
+        )
+    );
+    create(
+      "Drive 3ft Forwards, Ram 3ft Back, Drive 84 inches (7ft) Forwards",
+      () ->
+        new SequentialCommandGroup(
+          new DriveDistance(3 * 12, .25),
+          new DriveWait(0.5),
+          new DriveDistance(3 * 12, -1),
+          new DriveWait(1),
+          new DriveDistance(7 * 12, 0.5)
+        )
+    );
+  }
 }

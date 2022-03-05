@@ -12,7 +12,7 @@ public class DriveToAngle extends CommandBase{
 	//Declaring varibles
 	private double angle;
     public static double kP = 0.01; 
-    public static double kI = 0.5;
+    public static double kI = 0;
     public static double kD = 0;
     private double speed;
     private PIDController pidcontroller;
