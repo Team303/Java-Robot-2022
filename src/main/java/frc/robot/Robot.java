@@ -5,32 +5,24 @@ package frc.robot;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.RobotMap.DrivebaseConstants;
 import frc.robot.RobotMap.IOConstants;
 import frc.robot.autonomous.Autonomous;
 import frc.robot.autonomous.AutonomousProgram;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.commands.drive.DriveAmbient;
 import frc.robot.commands.drive.DriveDistance;
-import frc.robot.commands.drive.SetDriveSpeed;
 import frc.robot.commands.drive.ZeroEncoders;
 import frc.robot.commands.led.LEDBounce;
-import frc.robot.commands.led.LEDFade;
 import frc.robot.commands.led.SetLEDColor;
-import frc.robot.commands.led.LEDFlash;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.commands.drive.DriveToAngle;
-import frc.robot.commands.Intake.ExtendIntake;
-import frc.robot.commands.Intake.RetractIntake;
-import frc.robot.commands.Intake.StartIntake;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -141,11 +133,6 @@ public class Robot extends TimedRobot {
 		new JoystickButton(rightJoystick, 4).whileHeld(new DriveAmbient(-.5));
 		
 		new JoystickButton(rightJoystick, 2).whileHeld(new DriveAmbient(.75));
-		
-
-		
-		//reset encoders with joystick whenever
-		if(leftJoystick.getZ() <= 0) drivebase.resetEncoders();
 
 		//new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
 		//new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenHeld();
