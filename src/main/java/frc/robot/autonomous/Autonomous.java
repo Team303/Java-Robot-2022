@@ -30,7 +30,7 @@ public class Autonomous {
 
   public static void init() {
     create(
-      "Drive 3ft Forwards, Ram 3ft Back, Drive 96 inches (8ft) Forwards",
+      "Drive 3ft Forwards, Ram 3ft Back, Drive 8ft Forwards",
       () ->
         new SequentialCommandGroup(
           new DriveDistance(3 * 12, .25),
@@ -41,7 +41,7 @@ public class Autonomous {
         )
     );
     create(
-      "Drive 3ft Forwards, Ram 3ft Back, Drive 84 inches (7ft) Forwards",
+      "Drive 3ft Forwards, Ram 3ft Back, Drive 7ft Forwards",
       () ->
         new SequentialCommandGroup(
           new DriveDistance(3 * 12, .25),
@@ -52,7 +52,7 @@ public class Autonomous {
         )
     );
     create(
-      "Drive 3ft Forwards, Ram 3ft Back, Drive 72 inches (6ft) Forwards",
+      "Drive 3ft Forwards, Ram 3ft Back, Drive 6ft Forwards",
       () ->
         new SequentialCommandGroup(
           new DriveDistance(3 * 12, .25),
@@ -62,7 +62,35 @@ public class Autonomous {
           new DriveDistance(6 * 12, 0.5)
         )
     );
-    create("Drive Forward 100 inches", () -> new DriveDistance(100, 0.5));
-    create("Drive Backwards 100 inches", () -> new DriveDistance(100, 0.5));
+    create("Drive Forward 8ft", () -> new DriveDistance(8 * 12, 0.5));
+    create("Drive Forward 7ft", () -> new DriveDistance(7 * 12, 0.5));
+    create("Drive Forward 6ft", () -> new DriveDistance(6 * 12, 0.5));
+    create("Drive Backwards 8ft", () -> new DriveDistance(8 * 12, -0.5));
+    create("Drive Backwards 7ft", () -> new DriveDistance(7 * 12, -0.5));
+    create("Drive Backwards 6ft", () -> new DriveDistance(6 * 12, -0.5));
+    create("Start at line", () -> new SequentialCommandGroup(
+      new DriveDistance(4 * 12, -1),
+      new DriveWait(.5),
+      new DriveDistance(7 * 12, 0.5)
+    ));
+    create(
+      "Taxi 8ft then score",
+      () ->
+        new SequentialCommandGroup(
+          new DriveDistance(8 * 12, .25),
+          new DriveWait(0.5),
+          new DriveDistance(8 * 12, -1)
+        )
+    );
+
+    create(
+      "Taxi 7ft then score",
+      () ->
+        new SequentialCommandGroup(
+          new DriveDistance(7 * 12, .25),
+          new DriveWait(0.5),
+          new DriveDistance(7 * 12, -1)
+        )
+    );
   }
 }

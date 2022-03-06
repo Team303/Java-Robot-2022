@@ -7,11 +7,11 @@ package frc.robot.commands.drive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class DriveAmbient extends CommandBase {
+public class DriveHold extends CommandBase {
 
 	private final double speed;
 
-	public DriveAmbient(double speed) {
+	public DriveHold(double speed) {
 		this.speed = speed;
 		addRequirements(Robot.drivebase);
 	}

@@ -2,12 +2,16 @@
 
 package frc.robot;
 
+import org.opencv.ml.StatModel;
+
+import edu.wpi.first.math.StateSpaceUtil;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -19,13 +23,15 @@ import frc.robot.RobotMap.IOConstants;
 import frc.robot.autonomous.Autonomous;
 import frc.robot.autonomous.AutonomousProgram;
 import frc.robot.commands.drive.DefaultDrive;
-import frc.robot.commands.drive.DriveAmbient;
 import frc.robot.commands.drive.DriveDistance;
+import frc.robot.commands.drive.DriveHold;
 import frc.robot.commands.drive.DriveToAngle;
 import frc.robot.commands.drive.DriveWait;
 import frc.robot.commands.drive.ZeroEncoders;
 import frc.robot.commands.led.LEDBounce;
 import frc.robot.commands.led.LEDLeftRight;
+import frc.robot.commands.led.LEDRainbowFade;
+import frc.robot.commands.led.LEDRainbowRotate;
 import frc.robot.commands.led.SetLEDColor;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -54,9 +60,30 @@ public class Robot extends TimedRobot {
   /* Sendable for the color */
   public static SendableChooser<Color> colorChooser = new SendableChooser<>();
 
+  public static SendableChooser<Double> autoDelayChooser = new SendableChooser<>();
+
+  static {
+    autoDelayChooser.addOption("0.25", 0.25D);
+    autoDelayChooser.addOption("0.5",  0.5D);
+    autoDelayChooser.addOption("0.75", 0.75D);
+    autoDelayChooser.addOption("1.0",  1.0D);
+    autoDelayChooser.addOption("1.25", 1.25D);
+    autoDelayChooser.addOption("1.5",  1.5D);
+    autoDelayChooser.addOption("1.75", 1.75D);  
+    autoDelayChooser.addOption("2.0",  2.0D);
+    autoDelayChooser.addOption("2.25", 2.25D);
+    autoDelayChooser.addOption("2.5",  2.5D);
+    autoDelayChooser.addOption("2.75", 2.75D);
+    autoDelayChooser.addOption("3.0",  3.0D);
+    autoDelayChooser.setDefaultOption("0.0",  0.0D);
+
+    Shuffleboard
+    .getTab("Autonomous")
+    .add("Auto Start Delay", autoDelayChooser);
+  }
+
   // The command configured to run during auto
   private Command autonomousCommand;
-  private NetworkTableEntry autoDelay = Shuffleboard.getTab("Autonomous").add("Auto Start Delay", 0).getEntry();
 
   @Override
   public void robotInit() {
@@ -71,20 +98,12 @@ public class Robot extends TimedRobot {
 
     // This runs if no other commands are scheduled (teleop)
     drivebase.setDefaultCommand(new DefaultDrive());
-    ledStrip.setDefaultCommand(
-      new LEDLeftRight(
-        new Color(230 / 255D, 30 / 255D, 0 / 255D),
-        new Color(70D / 255, 0, 20D / 255)
-      )
-    );
 
-	// Could use DriverStation.getAlliance()
-	colorChooser.addOption("Red", RobotMap.LED.RED);
-	colorChooser.addOption("Blue", RobotMap.LED.BLUE);
-	colorChooser.setDefaultOption("Red", RobotMap.LED.RED);
-	Shuffleboard.getTab("Autonomous").add("Team Color Chooser", colorChooser);
-
-  
+    // Could use DriverStation.getAlliance()
+    colorChooser.addOption("Red", RobotMap.LED.RED);
+    colorChooser.addOption("Blue", RobotMap.LED.BLUE);
+    colorChooser.setDefaultOption("Red", RobotMap.LED.RED);
+    Shuffleboard.getTab("Autonomous").add("Team Color Chooser", colorChooser);
 
     /* Shuffleboard Stuff */
     Autonomous.init();
@@ -151,21 +170,21 @@ public class Robot extends TimedRobot {
     // 		.whenHeld(new LEDFade());
 
     //run commands with joysticks
-    new JoystickButton(leftJoystick, 4).whenPressed(new DriveToAngle(-45));
-    new JoystickButton(leftJoystick, 6).whenPressed(new DriveToAngle(-90));
-    new JoystickButton(leftJoystick, 2).whenPressed(new DriveToAngle(180));
-    new JoystickButton(leftJoystick, 5).whenPressed(new DriveToAngle(90));
-    new JoystickButton(leftJoystick, 3).whenPressed(new DriveToAngle(45));
+    // new JoystickButton(leftJoystick, 4).whenPressed(new DriveToAngle(-45));
+    // new JoystickButton(leftJoystick, 6).whenPressed(new DriveToAngle(-90));
+    // new JoystickButton(leftJoystick, 2).whenPressed(new DriveToAngle(180));
+    // new JoystickButton(leftJoystick, 5).whenPressed(new DriveToAngle(90));
+    // new JoystickButton(leftJoystick, 3).whenPressed(new DriveToAngle(45));
 
     // new JoystickButton(leftJoystick, 5).whenHeld(new ExtendIntake());
     // new JoystickButton(leftJoystick, 6).whenHeld(new RetractIntake());
 
-    new JoystickButton(rightJoystick, 3).whileHeld(new DriveAmbient(.5));
-    new JoystickButton(rightJoystick, 5).whileHeld(new DriveAmbient(1));
-    new JoystickButton(rightJoystick, 6).whileHeld(new DriveAmbient(-1));
-    new JoystickButton(rightJoystick, 4).whileHeld(new DriveAmbient(-.5));
+    new JoystickButton(rightJoystick, 3).whileHeld(new DriveHold(.5));
+    new JoystickButton(rightJoystick, 5).whileHeld(new DriveHold(1));
+    new JoystickButton(rightJoystick, 6).whileHeld(new DriveHold(-1));
+    new JoystickButton(rightJoystick, 4).whileHeld(new DriveHold(-.5));
 
-    new JoystickButton(rightJoystick, 2).whileHeld(new DriveAmbient(.75));
+    new JoystickButton(rightJoystick, 2).whileHeld(new DriveHold(.75));
     //new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
     //new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenHeld();
     //wait until PID is finished
@@ -200,7 +219,11 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
-      new SequentialCommandGroup(new DriveWait(autoDelay.getDouble(0.0)), autonomousCommand).schedule();
+      new SequentialCommandGroup(
+        new DriveWait(autoDelayChooser.getSelected()),
+        autonomousCommand
+      )
+        .schedule();
     }
 
     ledStrip.setDefaultCommand(new LEDBounce(colorChooser.getSelected()));
@@ -216,12 +239,14 @@ public class Robot extends TimedRobot {
 
     new SetLEDColor(RobotMap.LED.TELEOP_COLOR).initialize();
 
-	ledStrip.setDefaultCommand(
-      new LEDLeftRight(
-        new Color(230 / 255D, 30 / 255D, 0 / 255D),
-        new Color(70D / 255, 0, 20D / 255)
-      )
-    );
+    // ledStrip.setDefaultCommand(
+    //   new LEDLeftRight(
+    //     new Color(230 / 255D, 30 / 255D, 0 / 255D),
+    //     new Color(70D / 255, 0, 20D / 255)
+    //   )
+    // );
+
+    ledStrip.setDefaultCommand(new LEDRainbowRotate());
   }
 
   @Override
