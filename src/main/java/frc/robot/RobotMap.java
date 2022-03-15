@@ -31,6 +31,19 @@ public final class RobotMap {
       (WHEEL_DIAMTER * Math.PI) / ENCODER_COUNTS_PER_REV;
   }
 
+  public static final class Climber {
+
+    public static final int WINCH_PORT_RIGHT = 10;
+    public static final int WINCH_PORT_LEFT =  11;
+
+    public static final float SOFT_LIMIT = 1000;
+
+    public static final boolean WINCH_RIGHT_INVERTED =false;
+    public static final boolean WINCH_LEFT_INVERTED =false;
+    
+
+  }
+
   public static final class Intake {
 
     public static final int INTAKE_SPARK_ID = 6;

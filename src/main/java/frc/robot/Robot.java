@@ -37,6 +37,7 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 
 public class Robot extends TimedRobot {
 
@@ -45,6 +46,7 @@ public class Robot extends TimedRobot {
   public static LEDSubsystem ledStrip = new LEDSubsystem();
   public static IntakeSubsystem intake = new IntakeSubsystem();
   public static ShooterSubsystem shooter = new ShooterSubsystem();
+  public static ClimberSubsystem climb = new ClimberSubsystem();
 
   /* RoboRio Sensors */
   public static ADXRS450_Gyro gyro = new ADXRS450_Gyro();
@@ -128,6 +130,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.setDefaultNumber("Angle P value", DriveToAngle.kP);
     SmartDashboard.setDefaultNumber("Angle I value", DriveToAngle.kI);
     SmartDashboard.setDefaultNumber("Angle D value", DriveToAngle.kD);
+
+    SmartDashboard.setDefaultNumber("Climber Encoder", 0);
+
   }
 
   private void updateSmartDashbaord() {
@@ -148,6 +153,8 @@ public class Robot extends TimedRobot {
       SmartDashboard.getNumber("Angle I value", DriveToAngle.kI);
     DriveToAngle.kD =
       SmartDashboard.getNumber("Angle D value", DriveToAngle.kD);
+    
+    SmartDashboard.putNumber("CLimber Encoder", climb.encoderPosition());
   }
 
   private void configureButtonBindings() {
