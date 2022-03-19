@@ -21,8 +21,11 @@ public class Climb extends CommandBase {
 
   @Override
   public void execute() {
-
-    if (Robot.climb.encoderPosition() >= Climber.SOFT_LIMIT) 
+    // checks if the robot reaches to far and stops foward movement
+    // However allows downward movment
+    if (Robot.climb.encoderPosition() >= Climber.SOFT_LIMIT 
+            || Robot.climb.limitSwitchTringered()
+            && speed > 0) 
       return;
 
     Robot.climb.climb(speed);

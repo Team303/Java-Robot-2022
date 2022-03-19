@@ -67,5 +67,8 @@ public class ClimberSubsystem extends SubsystemBase {
     return climbEncoder.getPosition();
   }
 
+  public boolean limitSwitchTringered(){
+    return leftLimitSwitch.isPressed();
+  }
   
 }
