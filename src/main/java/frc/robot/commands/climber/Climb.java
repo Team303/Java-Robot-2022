@@ -11,37 +11,23 @@ import frc.robot.RobotMap.Climber;
 public class Climb extends CommandBase {
   
   
-public static enum ClimberDirection {kUP, kDOWN}
-private final ClimberDirection direction;
-private final double speed;
-private final double endPosition;
+  private final double speed;
 
   /** Creates a new ClimbUp. */
-  public Climb(ClimberDirection direction, double speed, double endPosition) {
-    this.direction = direction;
+  public Climb(double speed) {
     this.speed = speed;
-    this.endPosition = endPosition;
     addRequirements(Robot.climb);
   }
 
   @Override
   public void execute() {
-    if (direction == ClimberDirection.kUP)
-      Robot.climb.extend(speed);
-    else
-      Robot.climb.retract(speed);
+
+    if (Robot.climb.encoderPosition() >= Climber.SOFT_LIMIT) 
+      return;
+
+    Robot.climb.climb(speed);
   }
   
-  @Override
-  public void end(boolean interrupted) {
-    Robot.climb.stop();
-  }
-
-  @Override
-  public boolean isFinished() {
-    if (Robot.climb.encoderPosition() > Climber.SOFT_LIMIT)
-      return true;
-    return false;
-   }
+ 
 
 }

@@ -68,6 +68,7 @@ public final class RobotMap {
 
     public static final int LEFT_JOYSTICK_ID = 0;
     public static final int RIGHT_JOYSTICK_ID = 1;
+    public static final int PLAY_STATION_CONTROLLER = 2;
   }
 
   public static final class LED {

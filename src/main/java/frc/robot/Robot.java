@@ -2,16 +2,15 @@
 
 package frc.robot;
 
-import org.opencv.ml.StatModel;
 
-import edu.wpi.first.math.StateSpaceUtil;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
+import edu.wpi.first.wpilibj.simulation.JoystickSim;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -33,6 +32,8 @@ import frc.robot.commands.led.LEDLeftRight;
 import frc.robot.commands.led.LEDRainbowFade;
 import frc.robot.commands.led.LEDRainbowRotate;
 import frc.robot.commands.led.SetLEDColor;
+import frc.robot.commands.climber.Climb;
+import frc.robot.commands.climber.ResetAndEnableClimb;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -57,6 +58,9 @@ public class Robot extends TimedRobot {
   );
   public static Joystick rightJoystick = new Joystick(
     IOConstants.RIGHT_JOYSTICK_ID
+  );
+  public static PS4Controller playstationController = new PS4Controller(
+    IOConstants.PLAY_STATION_CONTROLLER
   );
 
   /* Sendable for the color */
@@ -97,9 +101,11 @@ public class Robot extends TimedRobot {
     gyro.reset();
 
     drivebase.resetEncoders();
+    new ResetAndEnableClimb();
 
     // This runs if no other commands are scheduled (teleop)
     drivebase.setDefaultCommand(new DefaultDrive());
+    climb.setDefaultCommand(new Climb(playstationController.getRightY()));
 
     // Could use DriverStation.getAlliance()
     colorChooser.addOption("Red", RobotMap.LED.RED);
@@ -192,6 +198,9 @@ public class Robot extends TimedRobot {
     new JoystickButton(rightJoystick, 4).whileHeld(new DriveHold(-.5));
 
     new JoystickButton(rightJoystick, 2).whileHeld(new DriveHold(.75));
+
+    
+
     //new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
     //new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenHeld();
     //wait until PID is finished
