@@ -6,7 +6,6 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.RobotMap.Climber;
 
 public class Climb extends CommandBase {
   
@@ -21,13 +20,6 @@ public class Climb extends CommandBase {
 
   @Override
   public void execute() {
-    // checks if the robot reaches to far and stops foward movement
-    // However allows downward movment
-    if (Robot.climb.encoderPosition() >= Climber.SOFT_LIMIT 
-            || Robot.climb.limitSwitchTringered()
-            && speed > 0) 
-      return;
-
     Robot.climb.climb(speed);
   }
   

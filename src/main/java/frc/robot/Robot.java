@@ -33,7 +33,7 @@ import frc.robot.commands.led.LEDRainbowFade;
 import frc.robot.commands.led.LEDRainbowRotate;
 import frc.robot.commands.led.SetLEDColor;
 import frc.robot.commands.climber.Climb;
-import frc.robot.commands.climber.ResetAndEnableClimb;
+import frc.robot.commands.climber.ResetClimbEncoder;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
     gyro.reset();
 
     drivebase.resetEncoders();
-    new ResetAndEnableClimb();
+    new ResetClimbEncoder();
 
     // This runs if no other commands are scheduled (teleop)
     drivebase.setDefaultCommand(new DefaultDrive());

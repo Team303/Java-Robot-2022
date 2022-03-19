@@ -10,8 +10,8 @@ import frc.robot.Robot;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ResetAndEnableClimb extends InstantCommand {
-  public ResetAndEnableClimb() {
+public class ResetClimbEncoder extends InstantCommand {
+  public ResetClimbEncoder() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Robot.climb);
   
@@ -21,6 +21,6 @@ public class ResetAndEnableClimb extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Robot.climb.resetAndEnable();
+    Robot.climb.resetEncoders();
   }
 }
