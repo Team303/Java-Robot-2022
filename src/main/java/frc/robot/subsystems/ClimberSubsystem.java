@@ -20,8 +20,7 @@ import com.revrobotics.SparkMaxLimitSwitch;
 
 public class ClimberSubsystem extends SubsystemBase {
   
-  private final CANSparkMax winchRight;
-  private final CANSparkMax winchLeft;
+  private final CANSparkMax climbMotor;
   private final RelativeEncoder climbEncoder;
   private final SparkMaxLimitSwitch upperLimitSwitch;
   private final SparkMaxLimitSwitch lowerLimitSwitch;
@@ -30,31 +29,23 @@ public class ClimberSubsystem extends SubsystemBase {
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
     
-    winchRight = new CANSparkMax(Climber.WINCH_PORT_RIGHT, MotorType.kBrushless);
-    winchLeft = new CANSparkMax(Climber.WINCH_PORT_LEFT, MotorType.kBrushless);
+    climbMotor = new CANSparkMax(Climber.CLIMB_PORT_ID, MotorType.kBrushless);
     
-    winchLeft.setInverted(Climber.WINCH_LEFT_INVERTED);
-    winchRight.setInverted(Climber.WINCH_RIGHT_INVERTED);
+    climbMotor.setInverted(Climber.CLIMB_MOTOR_INVERTED);
    
     //set limits so it doesn't go past (DON'T KNOW IF IT WORKS)
-    winchLeft.setSoftLimit(SoftLimitDirection.kForward, Climber.SOFT_LIMIT);
-    winchLeft.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    climbMotor.setSoftLimit(SoftLimitDirection.kForward, Climber.SOFT_LIMIT);
+    climbMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
+    climbEncoder = climbMotor.getEncoder();
 
-    climber = new MotorControllerGroup(winchLeft, winchRight);
-
-
-    climbEncoder = winchLeft.getEncoder();
-
-
-    //Upperlimit on left
-    upperLimitSwitch = winchLeft.getForwardLimitSwitch(Type.kNormallyClosed);
-
-    //Lower limit on right
-    lowerLimitSwitch = winchRight.getForwardLimitSwitch(Type.kNormallyClosed);
+    upperLimitSwitch = climbMotor.getForwardLimitSwitch(Type.kNormallyClosed);
+    lowerLimitSwitch = climbMotor.getReverseLimitSwitch(Type.kNormallyClosed);
 
   }
   public void climb(double speed) {
+    //might not be needed 
+    //since limitswiches should do this aready
     if((lowerLimitReached() &&  speed < 0)
      ||(upperLimitReached() && speed > 0))
       return;
@@ -62,13 +53,13 @@ public class ClimberSubsystem extends SubsystemBase {
   } 
 
   private boolean upperLimitReached(){
-    if(upperLimitSwitchTringered() && encoderPosition() >= Climber.SOFT_LIMIT)
+    if(upperLimitSwitchTringered() || encoderPosition() >= Climber.SOFT_LIMIT)
       return true;
     return false;
   }
 
   private boolean lowerLimitReached(){
-    if(lowerLimitSwitchTringered() && encoderPosition() <= 0)
+    if(lowerLimitSwitchTringered() || encoderPosition() <= 0)
       return true;
     return false;
   }

@@ -33,14 +33,11 @@ public final class RobotMap {
 
   public static final class Climber {
 
-    public static final int WINCH_PORT_RIGHT = 10;
-    public static final int WINCH_PORT_LEFT =  11;
+    public static final int CLIMB_PORT_ID = 10;
 
     public static final float SOFT_LIMIT = 1000;
 
-    public static final boolean WINCH_RIGHT_INVERTED =false;
-    public static final boolean WINCH_LEFT_INVERTED =false;
-    
+    public static final boolean CLIMB_MOTOR_INVERTED =false;    
 
   }
 
