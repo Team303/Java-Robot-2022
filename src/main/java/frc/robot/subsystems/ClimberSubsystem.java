@@ -6,8 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import javax.swing.text.html.HTMLDocument.RunElement;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
@@ -53,6 +51,7 @@ public class ClimberSubsystem extends SubsystemBase {
     climber.set(speed);
   } 
 
+  /*methods to check climb limits*/
   private boolean upperLimitReached(){
     if(upperLimitSwitchTringered() || encoderPosition() >= Climber.SOFT_LIMIT)
       return true;
@@ -74,7 +73,8 @@ public class ClimberSubsystem extends SubsystemBase {
   }
   
 
-  
+  /* helper methods*/
+
   public void resetEncoders(){
     climbEncoder.setPosition(0.0);
   }

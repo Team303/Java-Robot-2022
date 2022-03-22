@@ -10,17 +10,15 @@ import frc.robot.Robot;
 public class Climb extends CommandBase {
   
   
-  private final double speed;
-
   /** Creates a new ClimbUp. */
-  public Climb(double speed) {
-    this.speed = speed;
+  public Climb() {
     addRequirements(Robot.climb);
   }
 
   @Override
   public void execute() {
-    Robot.climb.climb(speed);
+    //set speed and direction from play station controllor to climb
+    Robot.climb.climb(Robot.playstationController.getRightY());
   }
   
  

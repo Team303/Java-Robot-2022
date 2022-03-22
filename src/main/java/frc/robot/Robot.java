@@ -105,7 +105,7 @@ public class Robot extends TimedRobot {
 
     // This runs if no other commands are scheduled (teleop)
     drivebase.setDefaultCommand(new DefaultDrive());
-    climb.setDefaultCommand(new Climb(playstationController.getRightY()));
+    climb.setDefaultCommand(new Climb());
 
     // Could use DriverStation.getAlliance()
     colorChooser.addOption("Red", RobotMap.LED.RED);
