@@ -37,12 +37,13 @@ public class ClimberSubsystem extends SubsystemBase {
     climbMotor.setSoftLimit(SoftLimitDirection.kForward, Climber.SOFT_LIMIT);
     climbMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
-    climbEncoder = climbMotor.getEncoder();
-
     upperLimitSwitch = climbMotor.getForwardLimitSwitch(Type.kNormallyClosed);
     lowerLimitSwitch = climbMotor.getReverseLimitSwitch(Type.kNormallyClosed);
+    
+    climbEncoder = climbMotor.getEncoder();
 
   }
+
   public void climb(double speed) {
     //might not be needed 
     //since limitswiches should do this aready
@@ -64,6 +65,14 @@ public class ClimberSubsystem extends SubsystemBase {
     return false;
   }
 
+  private boolean upperLimitSwitchTringered(){
+    return upperLimitSwitch.isPressed();
+  }
+
+  private boolean lowerLimitSwitchTringered(){
+    return lowerLimitSwitch.isPressed();
+  }
+  
 
   
   public void resetEncoders(){
@@ -74,12 +83,13 @@ public class ClimberSubsystem extends SubsystemBase {
     return climbEncoder.getPosition();
   }
 
-  private boolean upperLimitSwitchTringered(){
-    return upperLimitSwitch.isPressed();
+  public double getRPMofClimber(){
+    return climbEncoder.getCountsPerRevolution();
   }
 
-  private boolean lowerLimitSwitchTringered(){
-    return lowerLimitSwitch.isPressed();
+  public double getVoltageSpike(){
+    return climbMotor.getVoltageCompensationNominalVoltage();
   }
-  
+
+
 }

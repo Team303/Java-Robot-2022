@@ -138,7 +138,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.setDefaultNumber("Angle D value", DriveToAngle.kD);
 
     SmartDashboard.setDefaultNumber("Climber Encoder", 0);
-
+    SmartDashboard.setDefaultNumber("Climber RPM", 0);
+    SmartDashboard.setDefaultNumber("Climber Voltage Compensation", 0);
   }
 
   private void updateSmartDashbaord() {
@@ -161,6 +162,8 @@ public class Robot extends TimedRobot {
       SmartDashboard.getNumber("Angle D value", DriveToAngle.kD);
     
     SmartDashboard.putNumber("CLimber Encoder", climb.encoderPosition());
+    SmartDashboard.putNumber("Climber RPM", climb.getRPMofClimber());
+    SmartDashboard.putNumber("Climber Voltage Compensation", climb.getVoltageSpike());
   }
 
   private void configureButtonBindings() {

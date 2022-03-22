@@ -33,7 +33,7 @@ public final class RobotMap {
 
   public static final class Climber {
 
-    public static final int CLIMB_PORT_ID = 10;
+    public static final int CLIMB_PORT_ID = 7;
 
     public static final float SOFT_LIMIT = 1000;
 
