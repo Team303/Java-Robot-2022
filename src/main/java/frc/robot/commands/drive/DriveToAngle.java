@@ -31,14 +31,14 @@ public class DriveToAngle extends CommandBase{
     @Override
     public void initialize() {
         Robot.drivebase.resetEncoders();
-        Robot.gyro.reset();
+        Robot.navX.reset();
     }
 
     @Override
     public void execute() {
 
         // Max trun speed of 0.8 number not tested | negative angle beacsue Gyro is reversed 
-        speed = MathUtil.clamp(pidcontroller.calculate(-Robot.gyro.getAngle()), -0.8, 0.8);
+        speed = MathUtil.clamp(pidcontroller.calculate(-Robot.navX.getAngle()), -0.8, 0.8);
 
         //(kP * error), -(kP * error)
         Robot.drivebase.drive(speed, -speed);;

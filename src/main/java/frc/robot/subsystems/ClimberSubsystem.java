@@ -22,7 +22,6 @@ public class ClimberSubsystem extends SubsystemBase {
   private final RelativeEncoder climbEncoder;
   // private final SparkMaxLimitSwitch upperLimitSwitch;
   // private final SparkMaxLimitSwitch lowerLimitSwitch;
-  private static MotorControllerGroup climber;
 
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
@@ -54,7 +53,7 @@ public class ClimberSubsystem extends SubsystemBase {
      ||(upperLimitReached() && speed > 0))
       return;
     */  
-    climber.set(speed);
+    climbMotor.set(speed);
   } 
 
   /*methods to check climb limits (NOT USING RIGHT NOW)

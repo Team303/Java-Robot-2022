@@ -3,7 +3,7 @@
 package frc.robot;
 
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -40,6 +40,7 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
+
 public class Robot extends TimedRobot {
 
   /* Define Robot Subsystems */
@@ -50,7 +51,7 @@ public class Robot extends TimedRobot {
   public static ClimberSubsystem climb = new ClimberSubsystem();
 
   /* RoboRio Sensors */
-  public static ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+  public static AHRS navX = new AHRS(); 
 
   /* Robot IO Controls */
   public static Joystick leftJoystick = new Joystick(
@@ -97,8 +98,8 @@ public class Robot extends TimedRobot {
     configureButtonBindings();
 
     //Reset everything back to default
-    gyro.calibrate();
-    gyro.reset();
+    navX.calibrate();
+    navX.reset();
 
     drivebase.resetEncoders();
     new ResetClimbEncoder();
@@ -129,14 +130,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.setDefaultNumber("Right Encoder", 0);
     SmartDashboard.setDefaultNumber("Encoder Distance in Inches", 0);
 
-    SmartDashboard.setDefaultNumber("Gyro Angle", 0);
-    SmartDashboard.setDefaultNumber("Gyro Rate", 0);
+    SmartDashboard.setDefaultNumber("navX Angle", 0);
+    SmartDashboard.setDefaultNumber("navX Rate", 0);
     SmartDashboard.setDefaultNumber("Angle Error", 0);
 
     SmartDashboard.setDefaultNumber("Angle P value", DriveToAngle.kP);
     SmartDashboard.setDefaultNumber("Angle I value", DriveToAngle.kI);
     SmartDashboard.setDefaultNumber("Angle D value", DriveToAngle.kD);
 
+    SmartDashboard.setDefaultNumber("Climb Speed", 0);
     SmartDashboard.setDefaultNumber("Climber Encoder", 0);
     SmartDashboard.setDefaultNumber("Climber RPM", 0);
     SmartDashboard.setDefaultNumber("Climber Voltage Compensation", 0);
@@ -150,8 +152,8 @@ public class Robot extends TimedRobot {
       drivebase.getAverageEncoderDistance()
     );
 
-    SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
-    SmartDashboard.putNumber("Gyro Rate", gyro.getRate());
+    SmartDashboard.putNumber("navX Angle", navX.getAngle());
+    SmartDashboard.putNumber("navX Rate", navX.getRate());
     SmartDashboard.putNumber("Angle Error", DriveToAngle.error);
 
     DriveToAngle.kP =
@@ -161,6 +163,7 @@ public class Robot extends TimedRobot {
     DriveToAngle.kD =
       SmartDashboard.getNumber("Angle D value", DriveToAngle.kD);
     
+    SmartDashboard.putNumber("Climb Speed", operatorController.getRightY());
     SmartDashboard.putNumber("CLimber Encoder", climb.encoderPosition());
     SmartDashboard.putNumber("Climber RPM", climb.getRPMofClimber());
     SmartDashboard.putNumber("Climber Voltage Compensation", climb.getVoltageSpike());

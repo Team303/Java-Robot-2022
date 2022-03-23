@@ -25,7 +25,7 @@ public class DriveDistance extends CommandBase {
     public void initialize() {
         //resets everything for accurate readings 
         Robot.drivebase.resetEncoders();
-        Robot.gyro.reset();
+        Robot.navX.reset();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class DriveDistance extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         Robot.drivebase.resetEncoders();
-        Robot.gyro.reset();
+        Robot.navX.reset();
     }
 
     @Override
