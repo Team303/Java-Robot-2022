@@ -18,7 +18,7 @@ public class Climb extends CommandBase {
   @Override
   public void execute() {
     //set speed and direction from play station controllor to climb
-    Robot.climb.climb(Robot.playstationController.getRightY());
+    Robot.climb.climb(Robot.operatorController.getRightY());
   }
   
  

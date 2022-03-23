@@ -32,7 +32,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
 	DifferentialDrive drive;
 
 	public DrivebaseSubsystem() {
-
 		/* Left Motors */
 		leftFrontSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_FRONT_SPARK_ID, MotorType.kBrushed); // CAN ID 2
 		leftBackSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_BACK_SPARK_ID, MotorType.kBrushed);   // CAN ID 3

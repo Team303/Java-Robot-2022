@@ -20,8 +20,8 @@ public class ClimberSubsystem extends SubsystemBase {
   
   private final CANSparkMax climbMotor;
   private final RelativeEncoder climbEncoder;
-  private final SparkMaxLimitSwitch upperLimitSwitch;
-  private final SparkMaxLimitSwitch lowerLimitSwitch;
+  // private final SparkMaxLimitSwitch upperLimitSwitch;
+  // private final SparkMaxLimitSwitch lowerLimitSwitch;
   private static MotorControllerGroup climber;
 
   /** Creates a new ClimberSubsystem. */
@@ -31,13 +31,16 @@ public class ClimberSubsystem extends SubsystemBase {
     
     climbMotor.setInverted(Climber.CLIMB_MOTOR_INVERTED);
    
+    /* not using limit switches right now
+
     //set limits so it doesn't go past (DON'T KNOW IF IT WORKS)
     climbMotor.setSoftLimit(SoftLimitDirection.kForward, Climber.SOFT_LIMIT);
     climbMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
     upperLimitSwitch = climbMotor.getForwardLimitSwitch(Type.kNormallyClosed);
     lowerLimitSwitch = climbMotor.getReverseLimitSwitch(Type.kNormallyClosed);
-    
+
+    */
     climbEncoder = climbMotor.getEncoder();
 
   }
@@ -45,13 +48,16 @@ public class ClimberSubsystem extends SubsystemBase {
   public void climb(double speed) {
     //might not be needed 
     //since limitswiches should do this aready
+
+    /* DO NOT USE RIGHT NOW
     if((lowerLimitReached() &&  speed < 0)
      ||(upperLimitReached() && speed > 0))
       return;
+    */  
     climber.set(speed);
   } 
 
-  /*methods to check climb limits*/
+  /*methods to check climb limits (NOT USING RIGHT NOW)
   private boolean upperLimitReached(){
     if(upperLimitSwitchTringered() || encoderPosition() >= Climber.SOFT_LIMIT)
       return true;
@@ -63,7 +69,7 @@ public class ClimberSubsystem extends SubsystemBase {
       return true;
     return false;
   }
-
+  
   private boolean upperLimitSwitchTringered(){
     return upperLimitSwitch.isPressed();
   }
@@ -71,7 +77,7 @@ public class ClimberSubsystem extends SubsystemBase {
   private boolean lowerLimitSwitchTringered(){
     return lowerLimitSwitch.isPressed();
   }
-  
+  */ 
 
   /* helper methods*/
 

@@ -59,8 +59,8 @@ public class Robot extends TimedRobot {
   public static Joystick rightJoystick = new Joystick(
     IOConstants.RIGHT_JOYSTICK_ID
   );
-  public static PS4Controller playstationController = new PS4Controller(
-    IOConstants.PLAY_STATION_CONTROLLER
+  public static XboxController operatorController = new XboxController(
+    IOConstants.OPERATOR_CONTROLLER
   );
 
   /* Sendable for the color */
