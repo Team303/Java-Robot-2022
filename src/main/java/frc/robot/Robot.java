@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.robot.RobotMap.IOConstants;
 import frc.robot.autonomous.Autonomous;
 import frc.robot.autonomous.AutonomousProgram;
@@ -34,11 +35,14 @@ import frc.robot.commands.led.LEDRainbowRotate;
 import frc.robot.commands.led.SetLEDColor;
 import frc.robot.commands.climber.Climb;
 import frc.robot.commands.climber.ResetClimbEncoder;
+import frc.robot.commands.Intake.IntakeDeployer;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
+
 
 
 public class Robot extends TimedRobot {
@@ -49,6 +53,7 @@ public class Robot extends TimedRobot {
   public static IntakeSubsystem intake = new IntakeSubsystem();
   public static ShooterSubsystem shooter = new ShooterSubsystem();
   public static ClimberSubsystem climb = new ClimberSubsystem();
+  public static PneumaticsSubsystem pneumatics = new PneumaticsSubsystem();
 
   /* RoboRio Sensors */
   public static AHRS navX = new AHRS(); 
@@ -142,6 +147,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.setDefaultNumber("Climber Encoder", 0);
     SmartDashboard.setDefaultNumber("Climber RPM", 0);
     SmartDashboard.setDefaultNumber("Climber Voltage Compensation", 0);
+
+    SmartDashboard.setDefaultBoolean("Compressor State", false);
+    SmartDashboard.setDefaultNumber("Pneumatic Presure", 0);
   }
 
   private void updateSmartDashbaord() {
@@ -167,6 +175,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("CLimber Encoder", climb.encoderPosition());
     SmartDashboard.putNumber("Climber RPM", climb.getRPMofClimber());
     SmartDashboard.putNumber("Climber Voltage Compensation", climb.getVoltageSpike());
+
+    SmartDashboard.putBoolean("Compressor State", pneumatics.compressorState());
+    SmartDashboard.putNumber("Pneumatic Presure", pneumatics.pneumaticPressure());
   }
 
   private void configureButtonBindings() {
@@ -204,8 +215,9 @@ public class Robot extends TimedRobot {
     new JoystickButton(rightJoystick, 4).whileHeld(new DriveHold(-.5));
 
     new JoystickButton(rightJoystick, 2).whileHeld(new DriveHold(.75));
+    new JoystickButton(leftJoystick, 2).whenPressed(new IntakeDeployer(DoubleSolenoid.Value.kForward));
+    new JoystickButton(leftJoystick, 3).whenPressed(new IntakeDeployer(DoubleSolenoid.Value.kReverse));
 
-    
 
     //new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
     //new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenHeld();
