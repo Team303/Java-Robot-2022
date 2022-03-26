@@ -4,6 +4,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.util.Color;
 
+/*
+TODO Change around all the CAN IDs to fit
+*/
+
 public final class RobotMap {
 
   public static final class DrivebaseConstants {
@@ -43,7 +47,7 @@ public final class RobotMap {
 
   public static final class Intake {
 
-    public static final int INTAKE_SPARK_ID = 6;
+    public static final int INTAKE_SPARK_ID = 9;
     public static final boolean INTAKE_SPARK_INVERTED = false;
     public static final double INTAKE_SPARK_SPEED = 0.75;
 
@@ -54,11 +58,28 @@ public final class RobotMap {
 
   public static final class Shooter {
 
-    public static final int SHOOTER_SPARK_ID = 8;
-    public static final int INDEXER_SPARK_ID = 9;
+    public static final int SHOOTER_SPARK_ID = 11;
+    public static final int INDEXER_SPARK_ID = 12;
 
     public static final boolean SHOOTER_SPARK_INVERTED = false;
     public static final boolean INDEXER_SPARK_INVERTED = false;
+
+    public static final double SHOOTER_SETPOINT = 5600;
+    public static final double SHOOTER_TOLERANCE = 100;
+
+    public static final double INDEXER_SETPOINT = 5600;
+
+    public static final int SHOOTER_CANCODER_ID = 0;
+  }
+
+  public static final class Pneumatics{
+    //left and right solinoids must be the same id of pnematics hub
+
+    public static final int PNEMATIC_HUB_ID = 1;
+
+    public static final int SOLINOID_ID = 1;
+    public static final int FORWARD_ID = 1;
+    public static final int REVERSE_ID = 2;
   }
 
   public static final class IOConstants {
