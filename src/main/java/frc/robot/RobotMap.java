@@ -19,10 +19,10 @@ public final class RobotMap {
     public static final int RIGHT_CANCODER_ID = 6;
 
     /* Drivebase Motor Inversion */
-    public static final boolean LEFT_FRONT_SPARK_INVERTED = false;
-    public static final boolean LEFT_BACK_SPARK_INVERTED = false;
-    public static final boolean RIGHT_FRONT_SPARK_INVERTED = true;
-    public static final boolean RIGHT_BACK_SPARK_INVERTED = true;
+    public static final boolean LEFT_FRONT_SPARK_INVERTED = true;
+    public static final boolean LEFT_BACK_SPARK_INVERTED = true;
+    public static final boolean RIGHT_FRONT_SPARK_INVERTED = false;
+    public static final boolean RIGHT_BACK_SPARK_INVERTED = false;
 
     /* Motor Encoder Calculations */
     public static final double WHEEL_DIAMTER = 6; // inches
@@ -37,7 +37,7 @@ public final class RobotMap {
 
     public static final float SOFT_LIMIT = 1000;
 
-    public static final boolean CLIMB_MOTOR_INVERTED =false;    
+    public static final boolean CLIMB_MOTOR_INVERTED =true;    
 
   }
 
@@ -47,7 +47,7 @@ public final class RobotMap {
     public static final boolean INTAKE_SPARK_INVERTED = false;
     public static final double INTAKE_SPARK_SPEED = 0.75;
 
-    public static final int EXTEND_SPARK_ID = 7;
+    public static final int EXTEND_SPARK_ID = 13;
     public static final boolean EXTEND_SPARK_INVERTED = false;
     public static final double EXTEND_SPARK_SPEED = 0.25;
   }
@@ -63,9 +63,9 @@ public final class RobotMap {
 
   public static final class IOConstants {
 
-    public static final int LEFT_JOYSTICK_ID = 0;
+    public static final int LEFT_JOYSTICK_ID = 2;
     public static final int RIGHT_JOYSTICK_ID = 1;
-    public static final int OPERATOR_CONTROLLER = 2;
+    public static final int OPERATOR_CONTROLLER = 0;
   }
 
   public static final class LED {

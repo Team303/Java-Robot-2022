@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
     //Reset everything back to default
     navX.calibrate();
     navX.reset();
-
+ 
     drivebase.resetEncoders();
     new ResetClimbEncoder();
 
@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
       SmartDashboard.getNumber("Angle D value", DriveToAngle.kD);
     
     SmartDashboard.putNumber("Climb Speed", operatorController.getRightY());
-    SmartDashboard.putNumber("CLimber Encoder", climb.encoderPosition());
+    SmartDashboard.putNumber("Climber Encoder", climb.encoderPosition());
     SmartDashboard.putNumber("Climber RPM", climb.getRPMofClimber());
     SmartDashboard.putNumber("Climber Voltage Compensation", climb.getVoltageSpike());
   }
