@@ -1,6 +1,7 @@
 package frc.robot.commands.shooter;
 
 import frc.robot.Robot;
+import frc.robot.RobotMap.Shooter;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -9,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ShootShooter extends CommandBase {
     
     private PIDController pidController;
-    private double setShooterSpeed = 0;
+    private double shooterSpeed = 0;
     private final double kP = 0.015;
     private final double kI = 0;
     private final double kD = 0;
@@ -32,7 +33,8 @@ public class ShootShooter extends CommandBase {
         /*
         setShooterSpeed = pidController.calculate(measurement);
         */
-        Robot.shooter.run(setShooterSpeed);
+        Robot.shooter.runShooter(Robot.shooter.calculateSpeed(Robot.shooter.getRevolutions(), Shooter.SHOOTER_SETPOINT));
+        Robot.shooter.runIndexer(pidController.calculate(Robot.shooter.getIndexerEncoders(), Shooter.INDEXER_SETPOINT));
       
 
     }
@@ -40,7 +42,10 @@ public class ShootShooter extends CommandBase {
     @Override
     public void end(boolean interrupted){
 
-        Robot.shooter.run(0.0);
+        Robot.shooter.runShooter(0.0);
+        Robot.shooter.runIndexer(0.0);
+        Robot.shooter.resetIndexerEncoders();
+
     }
     @Override
     public boolean isFinished(){

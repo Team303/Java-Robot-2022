@@ -63,6 +63,13 @@ public final class RobotMap {
 
     public static final boolean SHOOTER_SPARK_INVERTED = false;
     public static final boolean INDEXER_SPARK_INVERTED = false;
+
+    public static final double SHOOTER_SETPOINT = 5600;
+    public static final double SHOOTER_TOLERANCE = 100;
+
+    public static final double INDEXER_SETPOINT = 5600;
+
+    public static final int SHOOTER_CANCODER_ID = 0;
   }
 
   public static final class Pneumatics{
@@ -70,15 +77,9 @@ public final class RobotMap {
 
     public static final int PNEMATIC_HUB_ID = 1;
 
-    public static final int LEFT_SOLINOID_ID = 1;
-    public static final int LEFT_FORWARD_ID = 1;
-    public static final int LEFT_REVERSE_ID = 2;
-
-    public static final int RIGHT_SOLINOID_ID = 1;
-    public static final int RIGHT_FORWARD_ID = 3;
-    public static final int RIGHT_REVERSE_ID = 4;
-
-
+    public static final int SOLINOID_ID = 1;
+    public static final int FORWARD_ID = 1;
+    public static final int REVERSE_ID = 2;
   }
 
   public static final class IOConstants {

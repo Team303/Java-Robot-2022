@@ -14,8 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class PneumaticsSubsystem extends SubsystemBase {
 
   private final Compressor compressor;
-  private final DoubleSolenoid leftSolenoid;
-  private final DoubleSolenoid rightSolenoid;
+  private final DoubleSolenoid Solenoid;
   
 
 
@@ -24,18 +23,11 @@ public class PneumaticsSubsystem extends SubsystemBase {
 
     compressor = new Compressor(Pneumatics.PNEMATIC_HUB_ID,  PneumaticsModuleType.REVPH);
 
-    leftSolenoid = new DoubleSolenoid(
-      Pneumatics.LEFT_SOLINOID_ID , 
+    Solenoid = new DoubleSolenoid(
+      Pneumatics.SOLINOID_ID , 
       PneumaticsModuleType.REVPH, 
-      Pneumatics.LEFT_FORWARD_ID, 
-      Pneumatics.LEFT_REVERSE_ID
-    );
-
-    rightSolenoid = new DoubleSolenoid(
-      Pneumatics.RIGHT_SOLINOID_ID,
-      PneumaticsModuleType.REVPH, 
-      Pneumatics.RIGHT_FORWARD_ID,
-      Pneumatics.RIGHT_REVERSE_ID
+      Pneumatics.FORWARD_ID, 
+      Pneumatics.REVERSE_ID
     );
     
   }
@@ -46,8 +38,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
   }
 
   public void intakeDeploySystem(Value direction){
-    leftSolenoid.set(direction);
-    rightSolenoid.set(direction);
+    Solenoid.set(direction);
   }
 
   public boolean compressorState(){
