@@ -4,6 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +25,7 @@ import frc.robot.commands.drive.DriveToAngle;
 import frc.robot.commands.drive.DriveWait;
 import frc.robot.commands.drive.ZeroEncoders;
 import frc.robot.commands.intake.IntakeDeployer;
+import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.led.LEDBounce;
 import frc.robot.commands.led.LEDRainbowRotate;
 import frc.robot.commands.led.SetLEDColor;
@@ -214,9 +216,13 @@ public class Robot extends TimedRobot {
     new JoystickButton(rightJoystick, 4).whileHeld(new DriveHold(-.5));
 
     new JoystickButton(rightJoystick, 2).whileHeld(new DriveHold(.75));
-    new JoystickButton(leftJoystick, 2).whenPressed(new IntakeDeployer(DoubleSolenoid.Value.kForward));
-    new JoystickButton(leftJoystick, 3).whenPressed(new IntakeDeployer(DoubleSolenoid.Value.kReverse));
+    
+    //A botton
+    new JoystickButton(operatorController, 2).whenPressed(new IntakeDeployer(DoubleSolenoid.Value.kForward));
+    //Y botton
+    new JoystickButton(operatorController, 4).whenPressed(new IntakeDeployer(DoubleSolenoid.Value.kReverse));
 
+    new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
 
     //new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
     //new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenHeld();

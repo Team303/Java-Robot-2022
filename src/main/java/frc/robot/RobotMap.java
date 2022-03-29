@@ -79,9 +79,11 @@ public final class RobotMap {
 
     public static final int PNEMATIC_HUB_ID = 1;
 
-    public static final int SOLINOID_ID = 1;
-    public static final int FORWARD_ID = 1;
-    public static final int REVERSE_ID = 2;
+    public static final int FORWARD_LEFT_ID = 0;
+    public static final int REVERSE_LEFT_ID = 1;
+
+    public static final int FORWARD_RIGHT_ID = 15;
+    public static final int REVERSE_RIGHT_ID = 14;
   }
 
   public static final class IOConstants {

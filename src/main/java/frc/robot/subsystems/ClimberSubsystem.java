@@ -21,8 +21,8 @@ public class ClimberSubsystem extends SubsystemBase {
   private final RelativeEncoder climbEncoder;
  
   // NOTE: Spark max has built in limit swtich capabilities but im stupid and didn't know that
-  public final DigitalInput bottomLeftLimitSwitch = new DigitalInput(Climber.BOTTOM_LEFT_LIMIT_SWITCH);
-  public final DigitalInput bottomRightLimitSwitch = new DigitalInput(Climber.BOTTOM_RIGHT_LIMIT_SWITCH);
+  public final DigitalInput bottomLeftLimitSwitch; 
+  public final DigitalInput bottomRightLimitSwitch; 
 
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
@@ -34,6 +34,9 @@ public class ClimberSubsystem extends SubsystemBase {
     climbMotor.setIdleMode(IdleMode.kBrake);
     
     climbEncoder = climbMotor.getEncoder();
+
+    bottomLeftLimitSwitch =  new DigitalInput(Climber.BOTTOM_LEFT_LIMIT_SWITCH);
+    bottomRightLimitSwitch =  new DigitalInput(Climber.BOTTOM_RIGHT_LIMIT_SWITCH);
   }
 
   public void climb(double speed) {
