@@ -23,10 +23,10 @@ public final class RobotMap {
     public static final int RIGHT_CANCODER_ID = 6;
 
     /* Drivebase Motor Inversion */
-    public static final boolean LEFT_FRONT_SPARK_INVERTED = true;
-    public static final boolean LEFT_BACK_SPARK_INVERTED = true;
-    public static final boolean RIGHT_FRONT_SPARK_INVERTED = false;
-    public static final boolean RIGHT_BACK_SPARK_INVERTED = false;
+    public static final boolean LEFT_FRONT_SPARK_INVERTED = false;
+    public static final boolean LEFT_BACK_SPARK_INVERTED = false;
+    public static final boolean RIGHT_FRONT_SPARK_INVERTED = true;
+    public static final boolean RIGHT_BACK_SPARK_INVERTED = true;
 
     /* Motor Encoder Calculations */
     public static final double WHEEL_DIAMTER = 6; // inches
@@ -38,6 +38,8 @@ public final class RobotMap {
   public static final class Climber {
 
     public static final int CLIMB_PORT_ID = 7;
+    public static final int BOTTOM_LEFT_LIMIT_SWITCH = 0;
+    public static final int BOTTOM_RIGHT_LIMIT_SWITCH = 1;
 
     public static final float SOFT_LIMIT = 1000;
 
@@ -84,8 +86,8 @@ public final class RobotMap {
 
   public static final class IOConstants {
 
-    public static final int LEFT_JOYSTICK_ID = 2;
-    public static final int RIGHT_JOYSTICK_ID = 1;
+    public static final int LEFT_JOYSTICK_ID = 1;
+    public static final int RIGHT_JOYSTICK_ID = 2;
     public static final int OPERATOR_CONTROLLER = 0;
   }
 

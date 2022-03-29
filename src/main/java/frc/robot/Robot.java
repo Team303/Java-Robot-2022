@@ -1,16 +1,10 @@
-// Copyright (c) 2022 Team 303
-
 package frc.robot;
-
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.simulation.JoystickSim;
-import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -18,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.cscore.VideoListener;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.robot.RobotMap.IOConstants;
 import frc.robot.autonomous.Autonomous;
@@ -29,22 +23,18 @@ import frc.robot.commands.drive.DriveHold;
 import frc.robot.commands.drive.DriveToAngle;
 import frc.robot.commands.drive.DriveWait;
 import frc.robot.commands.drive.ZeroEncoders;
+import frc.robot.commands.intake.IntakeDeployer;
 import frc.robot.commands.led.LEDBounce;
-import frc.robot.commands.led.LEDLeftRight;
-import frc.robot.commands.led.LEDRainbowFade;
 import frc.robot.commands.led.LEDRainbowRotate;
 import frc.robot.commands.led.SetLEDColor;
 import frc.robot.commands.climber.Climb;
 import frc.robot.commands.climber.ResetClimbEncoder;
-import frc.robot.commands.Intake.IntakeDeployer;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
-
-
 
 public class Robot extends TimedRobot {
 
@@ -151,6 +141,10 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.setDefaultBoolean("Compressor State", false);
     SmartDashboard.setDefaultNumber("Pneumatic Presure", 0);
+
+    SmartDashboard.setDefaultBoolean("Right Limit Switch", false);
+    SmartDashboard.setDefaultBoolean("Left Limit Switch", false);
+    SmartDashboard.setDefaultBoolean("Limit Switches", false);
   }
 
   private void updateSmartDashbaord() {
@@ -179,6 +173,10 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Compressor State", pneumatics.compressorState());
     SmartDashboard.putNumber("Pneumatic Presure", pneumatics.pneumaticPressure());
+
+    SmartDashboard.putBoolean("Right Limit Switch", climb.bottomRightLimitSwitch.get());
+    SmartDashboard.putBoolean("Left Limit Switch", climb.bottomLeftLimitSwitch.get());
+    SmartDashboard.putBoolean("Limit Switches", climb.bottomLimitReached());
   }
 
   private void configureButtonBindings() {

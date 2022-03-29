@@ -4,15 +4,14 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.SparkMaxLimitSwitch.Type;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.RelativeEncoder;
+
 import frc.robot.RobotMap.Climber;
 
 
@@ -20,8 +19,10 @@ public class ClimberSubsystem extends SubsystemBase {
   
   private final CANSparkMax climbMotor;
   private final RelativeEncoder climbEncoder;
-  // private final SparkMaxLimitSwitch upperLimitSwitch;
-  // private final SparkMaxLimitSwitch lowerLimitSwitch;
+ 
+  // NOTE: Spark max has built in limit swtich capabilities but im stupid and didn't know that
+  public final DigitalInput bottomLeftLimitSwitch = new DigitalInput(Climber.BOTTOM_LEFT_LIMIT_SWITCH);
+  public final DigitalInput bottomRightLimitSwitch = new DigitalInput(Climber.BOTTOM_RIGHT_LIMIT_SWITCH);
 
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
@@ -31,56 +32,22 @@ public class ClimberSubsystem extends SubsystemBase {
     climbMotor.setInverted(Climber.CLIMB_MOTOR_INVERTED);
 
     climbMotor.setIdleMode(IdleMode.kBrake);
-   
-    /* not using limit switches right now
-
-    //set limits so it doesn't go past (DON'T KNOW IF IT WORKS)
-    climbMotor.setSoftLimit(SoftLimitDirection.kForward, Climber.SOFT_LIMIT);
-    climbMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-
-    upperLimitSwitch = climbMotor.getForwardLimitSwitch(Type.kNormallyClosed);
-    lowerLimitSwitch = climbMotor.getReverseLimitSwitch(Type.kNormallyClosed);
-
-    */
+    
     climbEncoder = climbMotor.getEncoder();
-
   }
 
   public void climb(double speed) {
-    //might not be needed 
-    //since limitswiches should do this aready
-
-    /* DO NOT USE RIGHT NOW
-    if((lowerLimitReached() &&  speed < 0)
-     ||(upperLimitReached() && speed > 0))
+    if (bottomLimitReached() && speed < 0) {
+      climbMotor.set(0);
       return;
-    */  
+    }
     climbMotor.set(speed);
   } 
 
-  /*methods to check climb limits (NOT USING RIGHT NOW)
-  private boolean upperLimitReached(){
-    if(upperLimitSwitchTringered() || encoderPosition() >= Climber.SOFT_LIMIT)
-      return true;
-    return false;
+  public boolean bottomLimitReached(){
+    // Inverted for some reason?
+    return !bottomLeftLimitSwitch.get() || !bottomRightLimitSwitch.get();
   }
-
-  private boolean lowerLimitReached(){
-    if(lowerLimitSwitchTringered() || encoderPosition() <= 0)
-      return true;
-    return false;
-  }
-  
-  private boolean upperLimitSwitchTringered(){
-    return upperLimitSwitch.isPressed();
-  }
-
-  private boolean lowerLimitSwitchTringered(){
-    return lowerLimitSwitch.isPressed();
-  }
-  */ 
-
-  /* helper methods*/
 
   public void resetEncoders(){
     climbEncoder.setPosition(0.0);
@@ -97,6 +64,4 @@ public class ClimberSubsystem extends SubsystemBase {
   public double getVoltageSpike(){
     return climbMotor.getVoltageCompensationNominalVoltage();
   }
-
-
 }
