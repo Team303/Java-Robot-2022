@@ -69,7 +69,7 @@ public final class RobotMap {
     public static final double SHOOTER_SETPOINT = 5600;
     public static final double SHOOTER_TOLERANCE = 100;
 
-    public static final double INDEXER_SETPOINT = 5600;
+    public static final double INDEXER_SETPOINT = 17;
 
     public static final int SHOOTER_CANCODER_ID = 0;
   }
