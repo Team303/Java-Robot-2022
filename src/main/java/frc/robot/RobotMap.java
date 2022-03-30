@@ -13,14 +13,14 @@ public final class RobotMap {
   public static final class DrivebaseConstants {
 
     /* CAN IDs of the Motors on the Drive Base */
-    public static final int LEFT_FRONT_SPARK_ID = 2;
-    public static final int LEFT_BACK_SPARK_ID = 3;
-    public static final int RIGHT_FRONT_SPARK_ID = 5;
-    public static final int RIGHT_BACK_SPARK_ID = 4;
+    public static final int LEFT_FRONT_SPARK_ID = 4;
+    public static final int LEFT_BACK_SPARK_ID = 5;
+    public static final int RIGHT_FRONT_SPARK_ID = 7;
+    public static final int RIGHT_BACK_SPARK_ID = 6;
 
     /* Encoder CAN IDs */
-    public static final int LEFT_CANCODER_ID = 1;
-    public static final int RIGHT_CANCODER_ID = 6;
+    public static final int LEFT_CANCODER_ID = 2;
+    public static final int RIGHT_CANCODER_ID = 8;
 
     /* Drivebase Motor Inversion */
     public static final boolean LEFT_FRONT_SPARK_INVERTED = false;
@@ -37,7 +37,7 @@ public final class RobotMap {
 
   public static final class Climber {
 
-    public static final int CLIMB_PORT_ID = 7;
+    public static final int CLIMB_PORT_ID = 3;
     public static final int BOTTOM_LEFT_LIMIT_SWITCH = 0;
     public static final int BOTTOM_RIGHT_LIMIT_SWITCH = 1;
 
