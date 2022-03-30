@@ -13,20 +13,20 @@ public final class RobotMap {
   public static final class DrivebaseConstants {
 
     /* CAN IDs of the Motors on the Drive Base */
-    public static final int LEFT_FRONT_SPARK_ID = 4;
-    public static final int LEFT_BACK_SPARK_ID = 5;
-    public static final int RIGHT_FRONT_SPARK_ID = 7;
-    public static final int RIGHT_BACK_SPARK_ID = 6;
+    public static final int LEFT_FRONT_SPARK_ID = 2;
+    public static final int LEFT_BACK_SPARK_ID = 3;
+    public static final int RIGHT_FRONT_SPARK_ID = 5;
+    public static final int RIGHT_BACK_SPARK_ID = 4;
 
     /* Encoder CAN IDs */
-    public static final int LEFT_CANCODER_ID = 2;
-    public static final int RIGHT_CANCODER_ID = 8;
+    public static final int LEFT_CANCODER_ID = 1;
+    public static final int RIGHT_CANCODER_ID = 6;
 
     /* Drivebase Motor Inversion */
-    public static final boolean LEFT_FRONT_SPARK_INVERTED = false;
-    public static final boolean LEFT_BACK_SPARK_INVERTED = false;
-    public static final boolean RIGHT_FRONT_SPARK_INVERTED = true;
-    public static final boolean RIGHT_BACK_SPARK_INVERTED = true;
+    public static final boolean LEFT_FRONT_SPARK_INVERTED = true;
+    public static final boolean LEFT_BACK_SPARK_INVERTED = true;
+    public static final boolean RIGHT_FRONT_SPARK_INVERTED = false;
+    public static final boolean RIGHT_BACK_SPARK_INVERTED = false;
 
     /* Motor Encoder Calculations */
     public static final double WHEEL_DIAMTER = 6; // inches
@@ -37,13 +37,13 @@ public final class RobotMap {
 
   public static final class Climber {
 
-    public static final int CLIMB_PORT_ID = 3;
+    public static final int CLIMB_PORT_ID = 7;
     public static final int BOTTOM_LEFT_LIMIT_SWITCH = 0;
     public static final int BOTTOM_RIGHT_LIMIT_SWITCH = 1;
 
     public static final float SOFT_LIMIT = 1000;
 
-    public static final boolean CLIMB_MOTOR_INVERTED =true;    
+    public static final boolean CLIMB_MOTOR_INVERTED = false;    
 
   }
 
@@ -77,13 +77,12 @@ public final class RobotMap {
   public static final class Pneumatics{
     //left and right solinoids must be the same id of pnematics hub
 
-    public static final int PNEMATIC_HUB_ID = 1;
+    public static final int PNEMATIC_HUB_ID = 8;
+    public static final int FORWARD_LEFT_ID = 2;
+    public static final int REVERSE_LEFT_ID = 3;
 
-    public static final int FORWARD_LEFT_ID = 0;
-    public static final int REVERSE_LEFT_ID = 1;
-
-    public static final int FORWARD_RIGHT_ID = 15;
-    public static final int REVERSE_RIGHT_ID = 14;
+    public static final int FORWARD_RIGHT_ID = 0;
+    public static final int REVERSE_RIGHT_ID = 1;
   }
 
   public static final class IOConstants {

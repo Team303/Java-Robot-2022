@@ -33,6 +33,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     climbMotor.setIdleMode(IdleMode.kBrake);
     
+    
     climbEncoder = climbMotor.getEncoder();
 
     bottomLeftLimitSwitch =  new DigitalInput(Climber.BOTTOM_LEFT_LIMIT_SWITCH);
@@ -40,6 +41,10 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void climb(double speed) {
+    if(speed < 0.1 && speed > -0.1){
+      climbMotor.set(0);
+      return;
+    }
     if (bottomLimitReached() && speed < 0) {
       climbMotor.set(0);
       return;

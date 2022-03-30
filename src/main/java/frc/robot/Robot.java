@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.cscore.VideoListener;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.robot.RobotMap.IOConstants;
 import frc.robot.autonomous.Autonomous;
@@ -24,13 +23,14 @@ import frc.robot.commands.drive.DriveHold;
 import frc.robot.commands.drive.DriveToAngle;
 import frc.robot.commands.drive.DriveWait;
 import frc.robot.commands.drive.ZeroEncoders;
-import frc.robot.commands.Intake.IntakeDeployer;
-import frc.robot.commands.Intake.StartIntake;
+import frc.robot.commands.intake.IntakeDeployer;
+import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.led.LEDBounce;
 import frc.robot.commands.led.LEDRainbowRotate;
 import frc.robot.commands.led.SetLEDColor;
 import frc.robot.commands.climber.Climb;
 import frc.robot.commands.climber.ResetClimbEncoder;
+import frc.robot.commands.climber.ClimberDown;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -141,6 +141,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.setDefaultNumber("Climber RPM", 0);
     SmartDashboard.setDefaultNumber("Climber Voltage Compensation", 0);
 
+    SmartDashboard.setDefaultBoolean("Toggle Compressor", false);
     SmartDashboard.setDefaultBoolean("Compressor State", false);
     SmartDashboard.setDefaultNumber("Pneumatic Presure", 0);
 
@@ -173,6 +174,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Climber RPM", climb.getRPMofClimber());
     SmartDashboard.putNumber("Climber Voltage Compensation", climb.getVoltageSpike());
 
+
+    pneumatics.toggleCompressor( 
+      SmartDashboard.getBoolean("Toggle Compressor", false));
     SmartDashboard.putBoolean("Compressor State", pneumatics.compressorState());
     SmartDashboard.putNumber("Pneumatic Presure", pneumatics.pneumaticPressure());
 
@@ -218,11 +222,14 @@ public class Robot extends TimedRobot {
     new JoystickButton(rightJoystick, 2).whileHeld(new DriveHold(.75));
     
     //A botton
-    new JoystickButton(operatorController, 2).whenPressed(new IntakeDeployer(DoubleSolenoid.Value.kForward));
+    new JoystickButton(operatorController, 1).whenPressed(new IntakeDeployer());
     //Y botton
-    new JoystickButton(operatorController, 4).whenPressed(new IntakeDeployer(DoubleSolenoid.Value.kReverse));
+    //new JoystickButton(operatorController, 4).whenPressed(new IntakeDeployer(DoubleSolenoid.Value.kReverse));
 
     new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
+
+    new JoystickButton(operatorController, 6).whenPressed(new ClimberDown());
+
 
     //new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
     //new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenHeld();

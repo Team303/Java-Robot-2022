@@ -24,11 +24,13 @@ public class PneumaticsSubsystem extends SubsystemBase {
 
     compressor = new Compressor(Pneumatics.PNEMATIC_HUB_ID,  PneumaticsModuleType.REVPH);
 
+    compressor.enableDigital();
+
     solenoidLeft = new DoubleSolenoid(
       Pneumatics.PNEMATIC_HUB_ID , 
       PneumaticsModuleType.REVPH, 
       Pneumatics.FORWARD_LEFT_ID,
-      Pneumatics.REVERSE_RIGHT_ID
+      Pneumatics.REVERSE_LEFT_ID
     );
 
     solenoidRight = new DoubleSolenoid(
@@ -37,6 +39,9 @@ public class PneumaticsSubsystem extends SubsystemBase {
       Pneumatics.FORWARD_RIGHT_ID,
       Pneumatics.REVERSE_RIGHT_ID
     );
+
+    solenoidLeft.set(Value.kReverse);
+    solenoidRight.set(Value.kReverse);
     
   }
 
@@ -45,9 +50,20 @@ public class PneumaticsSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void intakeDeploySystem(Value direction){
-    solenoidLeft.set(direction);
-    solenoidRight.set(direction);
+  
+  public void toggleCompressor(boolean state){
+    if(state){
+      compressor.enableDigital();
+    } 
+    else{
+      compressor.disable();
+    }
+
+  }
+
+  public void intakeDeploySystem(){
+    solenoidLeft.toggle();
+    solenoidRight.toggle();
   }
 
   public boolean compressorState(){
