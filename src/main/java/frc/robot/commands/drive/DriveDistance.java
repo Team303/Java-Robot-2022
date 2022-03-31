@@ -52,6 +52,7 @@ public class DriveDistance extends CommandBase {
     @Override
     public boolean isFinished() {
         //check if you have went the distance based on encoders
+        //TODO change this to only right encoder if we can't fix left encoder
         return Math.abs(Robot.drivebase.getAverageEncoderDistance()) >= distance;
     }
 }

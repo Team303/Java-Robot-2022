@@ -13,6 +13,7 @@ public class IntakeDeployer extends CommandBase {
   /** Creates a new IntakeDeployer. */
 
   //private final Value direction;
+  private Value state;
 
   public IntakeDeployer() {
 
@@ -21,10 +22,21 @@ public class IntakeDeployer extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
+  public IntakeDeployer(Value state){
+
+    this.state = state;
+    addRequirements(Robot.pneumatics);
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Robot.pneumatics.intakeDeploySystem();
+    if (state != null){
+      Robot.pneumatics.intakeStateSystem(state);
+    }
+    else{
+      Robot.pneumatics.intakeDeploySystem();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

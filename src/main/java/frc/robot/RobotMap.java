@@ -43,7 +43,7 @@ public final class RobotMap {
 
     public static final float SOFT_LIMIT = 1000;
 
-    public static final boolean CLIMB_MOTOR_INVERTED = false;    
+    public static final boolean CLIMB_MOTOR_INVERTED = true;    
 
   }
 

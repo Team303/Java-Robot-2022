@@ -4,6 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -141,9 +143,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.setDefaultNumber("Climber RPM", 0);
     SmartDashboard.setDefaultNumber("Climber Voltage Compensation", 0);
 
-    SmartDashboard.setDefaultBoolean("Toggle Compressor", false);
+    SmartDashboard.setDefaultBoolean("Toggle Compressor", true);
     SmartDashboard.setDefaultBoolean("Compressor State", false);
     SmartDashboard.setDefaultNumber("Pneumatic Presure", 0);
+    SmartDashboard.setDefaultString("Left Solenoid", "Off");
+    SmartDashboard.setDefaultString("Right Solenoid", "Off");
 
     SmartDashboard.setDefaultBoolean("Right Limit Switch", false);
     SmartDashboard.setDefaultBoolean("Left Limit Switch", false);
@@ -169,19 +173,21 @@ public class Robot extends TimedRobot {
     DriveToAngle.kD =
       SmartDashboard.getNumber("Angle D value", DriveToAngle.kD);
     
-    SmartDashboard.putNumber("Climb Speed", operatorController.getRightY());
+    SmartDashboard.putNumber("Climb Speed", -operatorController.getRightY());
     SmartDashboard.putNumber("Climber Encoder", climb.encoderPosition());
     SmartDashboard.putNumber("Climber RPM", climb.getRPMofClimber());
     SmartDashboard.putNumber("Climber Voltage Compensation", climb.getVoltageSpike());
 
 
     pneumatics.toggleCompressor( 
-      SmartDashboard.getBoolean("Toggle Compressor", false));
+      SmartDashboard.getBoolean("Toggle Compressor", true));
     SmartDashboard.putBoolean("Compressor State", pneumatics.compressorState());
     SmartDashboard.putNumber("Pneumatic Presure", pneumatics.pneumaticPressure());
+    SmartDashboard.putString("Left Solenoid", pneumatics.leftSolinoidState().toString());
+    SmartDashboard.putString("Right Solenoid", pneumatics.rightSolinoidState().toString());
 
-    SmartDashboard.putBoolean("Right Limit Switch", climb.bottomRightLimitSwitch.get());
-    SmartDashboard.putBoolean("Left Limit Switch", climb.bottomLeftLimitSwitch.get());
+    SmartDashboard.putBoolean("Right Limit Switch", !climb.bottomRightLimitSwitch.get());
+    SmartDashboard.putBoolean("Left Limit Switch", !climb.bottomLeftLimitSwitch.get());
     SmartDashboard.putBoolean("Limit Switches", climb.bottomLimitReached());
   }
 
@@ -221,14 +227,15 @@ public class Robot extends TimedRobot {
 
     new JoystickButton(rightJoystick, 2).whileHeld(new DriveHold(.75));
     
+    new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenHeld(new IntakeDeployer());
     //A botton
-    new JoystickButton(operatorController, 1).whenPressed(new IntakeDeployer());
+    new JoystickButton(operatorController, 1).whenPressed(new IntakeDeployer(Value.kForward));
     //Y botton
-    //new JoystickButton(operatorController, 4).whenPressed(new IntakeDeployer(DoubleSolenoid.Value.kReverse));
+    new JoystickButton(operatorController, 4).whenPressed(new IntakeDeployer(Value.kReverse));
 
     new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
 
-    new JoystickButton(operatorController, 6).whenPressed(new ClimberDown());
+    //new JoystickButton(operatorController, 6).whenPressed(new ClimberDown());
 
 
     //new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());

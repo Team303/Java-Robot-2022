@@ -66,10 +66,23 @@ public class PneumaticsSubsystem extends SubsystemBase {
     solenoidRight.toggle();
   }
 
+  public void intakeStateSystem(Value dir){
+    solenoidLeft.set(dir);
+    solenoidRight.set(dir);
+  }
+
   public boolean compressorState(){
     return compressor.enabled();
   }
   public double pneumaticPressure(){
     return compressor.getPressure();
+  }
+
+  public Value leftSolinoidState(){
+    return solenoidLeft.get();
+  }
+  
+  public Value rightSolinoidState(){
+    return solenoidRight.get();
   }
 }

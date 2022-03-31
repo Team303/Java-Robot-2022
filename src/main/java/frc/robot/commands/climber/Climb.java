@@ -4,11 +4,13 @@
 
 package frc.robot.commands.climber;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
 public class Climb extends CommandBase {
-  
+
+  double speed;
   
   /** Creates a new ClimbUp. */
   public Climb() {
@@ -17,8 +19,17 @@ public class Climb extends CommandBase {
 
   @Override
   public void execute() {
-    //set speed and direction from play station controllor to climb
-    Robot.climb.climb(Robot.operatorController.getRightY());
+    //set speed and direction from operator controllor to climb
+    speed = -Robot.operatorController.getRightY();
+
+
+    if(speed > -0.1 && speed < 0.1){
+      speed = 0;
+    }
+    // nagative is down,
+    speed = MathUtil.clamp(speed, -0.5, 0.75);
+
+    Robot.climb.climb(speed);
   }
   
  
