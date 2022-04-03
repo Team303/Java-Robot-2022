@@ -22,20 +22,20 @@ public class PneumaticsSubsystem extends SubsystemBase {
   /** Creates a new PneumaticsSubsystem. */
   public PneumaticsSubsystem() {
 
-    compressor = new Compressor(Pneumatics.PNEMATIC_HUB_ID,  PneumaticsModuleType.REVPH);
+    compressor = new Compressor(Pneumatics.PNEMATIC_HUB_ID,  PneumaticsModuleType.CTREPCM);
 
     compressor.enableDigital();
 
     solenoidLeft = new DoubleSolenoid(
       Pneumatics.PNEMATIC_HUB_ID , 
-      PneumaticsModuleType.REVPH, 
+      PneumaticsModuleType.CTREPCM, 
       Pneumatics.FORWARD_LEFT_ID,
       Pneumatics.REVERSE_LEFT_ID
     );
 
     solenoidRight = new DoubleSolenoid(
       Pneumatics.PNEMATIC_HUB_ID , 
-      PneumaticsModuleType.REVPH, 
+      PneumaticsModuleType.CTREPCM, 
       Pneumatics.FORWARD_RIGHT_ID,
       Pneumatics.REVERSE_RIGHT_ID
     );

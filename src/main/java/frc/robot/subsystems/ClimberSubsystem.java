@@ -21,8 +21,12 @@ public class ClimberSubsystem extends SubsystemBase {
   private final RelativeEncoder climbEncoder;
  
   // NOTE: Spark max has built in limit swtich capabilities but im stupid and didn't know that
-  public final DigitalInput bottomLeftLimitSwitch; 
-  public final DigitalInput bottomRightLimitSwitch; 
+  public final GroundedDigitalInput bottomLeftLimitSwitch; 
+  public final GroundedDigitalInput bottomRightLimitSwitch; 
+  public final GroundedDigitalInput topRightLimitSwitch; 
+  public final GroundedDigitalInput topLeftLimitSwitch; 
+
+  public final GroundedDigitalInput neutralToggleSwitch; 
 
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
@@ -36,13 +40,21 @@ public class ClimberSubsystem extends SubsystemBase {
     
     climbEncoder = climbMotor.getEncoder();
 
-    bottomLeftLimitSwitch =  new DigitalInput(Climber.BOTTOM_LEFT_LIMIT_SWITCH);
-    bottomRightLimitSwitch =  new DigitalInput(Climber.BOTTOM_RIGHT_LIMIT_SWITCH);
+    bottomLeftLimitSwitch =  new GroundedDigitalInput(Climber.BOTTOM_LEFT_LIMIT_SWITCH);
+    bottomRightLimitSwitch =  new GroundedDigitalInput(Climber.BOTTOM_RIGHT_LIMIT_SWITCH);
+    topRightLimitSwitch =  new GroundedDigitalInput(Climber.TOP_RIGHT_LIMIT_SWITCH);
+    topLeftLimitSwitch =  new GroundedDigitalInput(Climber.TOP_LEFT_LIMIT_SWITCH);
+
+    neutralToggleSwitch =  new GroundedDigitalInput(Climber.NEUTRAL_TOGGLE_SWITCH);
+  }
+
+  public void setNeutralMode(IdleMode mode) {
+      climbMotor.setIdleMode(mode);
   }
 
   public void climb(double speed) {
 
-    if (bottomLimitReached() && speed < 0) {
+    if ((bottomLimitReached() && speed < 0) || (topLimitReached() && speed > 0)) {
       climbMotor.set(0);
       return;
     }
@@ -50,9 +62,11 @@ public class ClimberSubsystem extends SubsystemBase {
   } 
 
   public boolean bottomLimitReached(){
-    // Inverted for some reason?
-    //limit switch is normally closed so that why
-    return !bottomLeftLimitSwitch.get() || !bottomRightLimitSwitch.get();
+    return bottomLeftLimitSwitch.get() || bottomRightLimitSwitch.get();
+  }
+
+  public boolean topLimitReached(){
+    return topLeftLimitSwitch.get() || topRightLimitSwitch.get();
   }
 
   public void resetEncoders(){

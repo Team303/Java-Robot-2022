@@ -40,11 +40,13 @@ public final class RobotMap {
     public static final int CLIMB_PORT_ID = 7;
     public static final int BOTTOM_LEFT_LIMIT_SWITCH = 0;
     public static final int BOTTOM_RIGHT_LIMIT_SWITCH = 1;
+    public static final int TOP_RIGHT_LIMIT_SWITCH = 8;
+    public static final int TOP_LEFT_LIMIT_SWITCH = 9;
+    public static final int NEUTRAL_TOGGLE_SWITCH = 4;
 
     public static final float SOFT_LIMIT = 1000;
 
     public static final boolean CLIMB_MOTOR_INVERTED = true;    
-
   }
 
   public static final class Intake {
@@ -78,6 +80,7 @@ public final class RobotMap {
     //left and right solinoids must be the same id of pnematics hub
 
     public static final int PNEMATIC_HUB_ID = 8;
+    
     public static final int FORWARD_LEFT_ID = 2;
     public static final int REVERSE_LEFT_ID = 3;
 
@@ -94,8 +97,8 @@ public final class RobotMap {
 
   public static final class LED {
 
-    public static final int LED_ID = 8;
-    public static final int BUFFER_LENGTH = 60;
+    public static final int LED_ID = 0;
+    public static final int BUFFER_LENGTH = 200;
 
     public static final Color RED = new Color(255 / 255D, 0, 0);
     public static final Color BLUE = new Color(0, 0, 255 / 255D);
