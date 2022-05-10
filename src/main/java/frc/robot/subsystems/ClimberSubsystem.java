@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.RobotMap.Climber;
+import frc.robot.util.GroundedDigitalInput;
 
 
 public class ClimberSubsystem extends SubsystemBase {

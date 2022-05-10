@@ -29,27 +29,19 @@ import frc.robot.commands.drive.DriveHold;
 import frc.robot.commands.drive.DriveToAngle;
 import frc.robot.commands.drive.DriveWait;
 import frc.robot.commands.drive.ZeroEncoders;
-import frc.robot.commands.intake.IntakeDeployer;
-import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.led.LEDBounce;
 import frc.robot.commands.led.LEDRainbowRotate;
 import frc.robot.commands.led.SetLEDColor;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.PneumaticsSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 public class Robot extends TimedRobot {
 
   /* Define Robot Subsystems */
   public static DrivebaseSubsystem drivebase = new DrivebaseSubsystem();
   public static LEDSubsystem ledStrip = new LEDSubsystem();
-  public static IntakeSubsystem intake = new IntakeSubsystem();
-  public static ShooterSubsystem shooter = new ShooterSubsystem();
   public static ClimberSubsystem climb = new ClimberSubsystem();
-  public static PneumaticsSubsystem pneumatics = new PneumaticsSubsystem();
 
   /* RoboRio Sensors */
   public static AHRS navX = new AHRS();
@@ -185,23 +177,6 @@ public class Robot extends TimedRobot {
       climb.getVoltageSpike()
     );
 
-    pneumatics.toggleCompressor(
-      SmartDashboard.getBoolean("Toggle Compressor", true)
-    );
-    SmartDashboard.putBoolean("Compressor State", pneumatics.compressorState());
-    SmartDashboard.putNumber(
-      "Pneumatic Presure",
-      pneumatics.pneumaticPressure()
-    );
-    SmartDashboard.putString(
-      "Left Solenoid",
-      pneumatics.leftSolinoidState().toString()
-    );
-    SmartDashboard.putString(
-      "Right Solenoid",
-      pneumatics.rightSolinoidState().toString()
-    );
-
     SmartDashboard.putBoolean(
       "Bottom Right LS",
       climb.bottomRightLimitSwitch.get()
@@ -253,25 +228,6 @@ public class Robot extends TimedRobot {
 
     new JoystickButton(rightJoystick, 2).whileHeld(new DriveHold(.75));
 
-    new JoystickButton(rightJoystick, ButtonType.kTrigger.value)
-    .whenHeld(new IntakeDeployer());
-    //A botton
-    new JoystickButton(operatorController, 1)
-    .whenPressed(new IntakeDeployer(Value.kForward));
-    //Y botton
-    new JoystickButton(operatorController, 4)
-    .whenPressed(new IntakeDeployer(Value.kReverse));
-
-    new JoystickButton(leftJoystick, ButtonType.kTrigger.value)
-    .whenHeld(new StartIntake());
-
-    new JoystickButton(operatorController, 3)
-    .whenPressed(
-        () -> {
-          pneumatics.toggleCompressor(!pneumatics.compressorState());
-          System.out.println("Toggle: " + pneumatics.compressorState());
-        }
-      );
     //new JoystickButton(operatorController, 6).whenPressed(new ClimberDown());
 
     //new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
