@@ -30,7 +30,7 @@ public class LEDRainbowRotate extends CommandBase {
     }
 
     //send the color to be used by the LEDSubsystem
-    Robot.ledStrip.led.setData(Robot.ledStrip.ledBuffer);
+		Robot.ledStrip.writeData();
   }
 
   @Override

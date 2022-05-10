@@ -54,8 +54,8 @@ public class LEDBounce extends CommandBase {
     for (int i = 0; i < LED_COUNT; i++)
       Robot.ledStrip.ledBuffer.setLED(bufferLen * 2 - index - i - 1, this.color);
 
-    Robot.ledStrip.led.setData(Robot.ledStrip.ledBuffer);
-  }
+      Robot.ledStrip.writeData();
+    }
 
   @Override
   public void end(boolean interrupted) {

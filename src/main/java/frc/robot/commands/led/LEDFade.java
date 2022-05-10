@@ -1,6 +1,7 @@
 package frc.robot.commands.led;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 
 import static frc.robot.Robot.ledStrip;
 
@@ -26,7 +27,7 @@ public class LEDFade extends CommandBase {
 		}
 
 		//send the color to be used by the LEDSubsystem
-		ledStrip.led.setData(ledStrip.ledBuffer);
+		Robot.ledStrip.writeData();
 
 	}
 
@@ -53,7 +54,7 @@ public class LEDFade extends CommandBase {
 		}
 
 		//send the color to be used by the LEDSubsystem
-		ledStrip.led.setData(ledStrip.ledBuffer);
+		Robot.ledStrip.writeData();
 
 	}
 
@@ -68,6 +69,6 @@ public class LEDFade extends CommandBase {
 		blue = 0;
 		backwards = false;
 
-		ledStrip.led.setData(ledStrip.ledBuffer);
+		Robot.ledStrip.writeData();
 	}
 }

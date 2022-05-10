@@ -34,7 +34,7 @@ public class LEDLeftRight extends CommandBase {
       Robot.ledStrip.ledBuffer.setLED(bufferLen + i, this.right);
     }
 
-    Robot.ledStrip.led.setData(Robot.ledStrip.ledBuffer);
+		Robot.ledStrip.writeData();
   }
 
   @Override

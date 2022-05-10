@@ -2,10 +2,10 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax.IdleMode;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -18,10 +18,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.RobotMap.IOConstants;
+import frc.robot.RobotMap.LED;
 import frc.robot.autonomous.Autonomous;
 import frc.robot.autonomous.AutonomousProgram;
 import frc.robot.commands.climber.Climb;
-import frc.robot.commands.climber.ClimberDown;
 import frc.robot.commands.climber.ResetClimbEncoder;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.commands.drive.DriveDistance;
@@ -142,8 +142,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.setDefaultNumber("Climber RPM", 0);
     SmartDashboard.setDefaultNumber("Climber Voltage Compensation", 0);
 
-    SmartDashboard.setDefaultBoolean("Toggle Compressor", true);
-    SmartDashboard.putBoolean("Toggle Compressor", true);
+    SmartDashboard.setDefaultBoolean("Toggle Compressor", false);
+    SmartDashboard.putBoolean("Toggle Compressor", false);
     SmartDashboard.setDefaultBoolean("Compressor State", false);
     SmartDashboard.setDefaultNumber("Pneumatic Presure", 0);
     SmartDashboard.setDefaultString("Left Solenoid", "Off");
@@ -315,10 +315,8 @@ public class Robot extends TimedRobot {
         .schedule();
     }
 
-    Color red = new Color (255 / 255D, 0 / 255D, 0 / 255D);
-    Color blue = new Color (0 / 255D, 255 / 255D, 0 / 255D);
-
-    ledStrip.setDefaultCommand(new SetLEDColor(DriveStation.));
+    // ledStrip.setDefaultCommand(new SetLEDColor(DriverStation.getAlliance() == Alliance.Blue ? blue : red));
+    new SetLEDColor(DriverStation.getAlliance() == Alliance.Blue ? LED.RED : LED.BLUE).initialize();
   }
 
   @Override
@@ -329,8 +327,8 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
 
-    new SetLEDColor(RobotMap.LED.TELEOP_COLOR).initialize();
-
+    // new SetLEDColor(RobotMap.LED.TELEOP_COLOR).initialize();
+    new SetLEDColor(DriverStation.getAlliance() == Alliance.Blue ? LED.RED : LED.BLUE).initialize();
     // ledStrip.setDefaultCommand(
     //   new LEDLeftRight(
     //     new Color(230 / 255D, 30 / 255D, 0 / 255D),

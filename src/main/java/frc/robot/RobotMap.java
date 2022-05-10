@@ -97,7 +97,7 @@ public final class RobotMap {
 
   public static final class LED {
 
-    public static final int LED_ID = 0;
+    public static final int LED_ID = 1;
     public static final int BUFFER_LENGTH = 200;
 
     public static final Color RED = new Color(255 / 255D, 0, 0);

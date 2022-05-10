@@ -23,6 +23,6 @@ public class SetLEDColor extends CommandBase {
 			Robot.ledStrip.ledBuffer.setLED(i, this.color);
 		}
 		// Send color data to LEDSubsytem
-		Robot.ledStrip.led.setData(Robot.ledStrip.ledBuffer);
+		Robot.ledStrip.writeData();
 	}
 }

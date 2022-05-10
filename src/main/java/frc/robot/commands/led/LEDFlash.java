@@ -49,7 +49,7 @@ public class LEDFlash extends CommandBase {
         }
 
         // Send the data to LEDSubsytem 
-        Robot.ledStrip.led.setData(Robot.ledStrip.ledBuffer);
+		Robot.ledStrip.writeData();
     }
 
     public void end(boolean interupted) {
