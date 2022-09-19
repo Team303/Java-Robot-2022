@@ -5,24 +5,21 @@ import frc.robot.Robot;
 
 public class SetDriveSpeed extends CommandBase {
 
-	//declare varibles
 	private final double speed;
+	private final double previousSpeed;
 
 	public SetDriveSpeed(double speed) {
-		//initialize varibles
 		this.speed = speed;
+		this.previousSpeed = Robot.drivebase.getMaxOutput();
 	}
 
 	@Override
 	public void initialize() {
-		//sets max speed
 		Robot.drivebase.setMaxOutput(this.speed);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		//should really never be called until robot is disabled
-		//resets max speed back to 1
-		Robot.drivebase.setMaxOutput(1);
+		Robot.drivebase.setMaxOutput(previousSpeed);
 	}
 }

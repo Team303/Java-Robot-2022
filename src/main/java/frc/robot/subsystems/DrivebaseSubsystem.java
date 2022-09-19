@@ -2,17 +2,30 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotMap.DrivebaseConstants;
 
-import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class DrivebaseSubsystem extends SubsystemBase {
+
+	/* ShuffleBoard */
+	public static final ShuffleboardTab DRIVEBASE_TAB = Shuffleboard.getTab("Drivebase");
+
+	public static final NetworkTableEntry LEFT_ENCODER_ENTRY = DRIVEBASE_TAB.add("Left Encoder", 0).getEntry();
+	public static final NetworkTableEntry RIGHT_ENCODER_ENTRY = DRIVEBASE_TAB.add("Right Encoder", 0).getEntry();
+	public static final NetworkTableEntry ENCODER_DISTANCE_ENTRY = DRIVEBASE_TAB.add("Encoder Distance", 0).getEntry();
+	public static final NetworkTableEntry NAVX_ANGLE_ENTRY = DRIVEBASE_TAB.add("NavX Angle", 0).getEntry();
+	public static final NetworkTableEntry NAVX_RATE_ENTRY = DRIVEBASE_TAB.add("NavX Rate", 0).getEntry();
 
 	/* Left Motors */
 	private final CANSparkMax leftFrontSparkMax;
@@ -25,16 +38,19 @@ public class DrivebaseSubsystem extends SubsystemBase {
 	private final MotorControllerGroup rightMotors;
 
 	/* Encoders */
-	private final CANCoder leftCanCoder;
-	private final CANCoder rightCanCoder;
-	
+	private final RelativeEncoder frontLeftEncoder;
+	private final RelativeEncoder backLeftEncoder;
+	private final RelativeEncoder frontRightEncoder;
+	private final RelativeEncoder backRightEncoder;
 
-	DifferentialDrive drive;
+	private DifferentialDrive drive;
+
+	private double maxOutput = 1;
 
 	public DrivebaseSubsystem() {
 		/* Left Motors */
-		leftFrontSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_FRONT_SPARK_ID, MotorType.kBrushed); // CAN ID 2
-		leftBackSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_BACK_SPARK_ID, MotorType.kBrushed);   // CAN ID 3
+		leftFrontSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_FRONT_SPARK_ID, MotorType.kBrushed);
+		leftBackSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_BACK_SPARK_ID, MotorType.kBrushed);
 
 		leftFrontSparkMax.setIdleMode(IdleMode.kBrake);
 		leftBackSparkMax.setIdleMode(IdleMode.kBrake);
@@ -45,8 +61,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
 		leftMotors = new MotorControllerGroup(leftFrontSparkMax, leftBackSparkMax);
 
 		/* Right Motors */
-		rightFrontSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_FRONT_SPARK_ID, MotorType.kBrushed);// CAN ID 5
-		rightBackSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_BACK_SPARK_ID, MotorType.kBrushed);// CAN ID 4
+		rightFrontSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_FRONT_SPARK_ID, MotorType.kBrushed);
+		rightBackSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_BACK_SPARK_ID, MotorType.kBrushed);
 
 		rightFrontSparkMax.setIdleMode(IdleMode.kBrake);
 		rightBackSparkMax.setIdleMode(IdleMode.kBrake);
@@ -57,18 +73,13 @@ public class DrivebaseSubsystem extends SubsystemBase {
 		rightMotors = new MotorControllerGroup(rightFrontSparkMax, rightBackSparkMax);
 
 		/* All Together */
-
 		this.drive = new DifferentialDrive(leftMotors, rightMotors);
 
-		/* Encdoers */
-		
-		leftCanCoder = new CANCoder(DrivebaseConstants.LEFT_CANCODER_ID);   // CAN ID 1
-		rightCanCoder = new CANCoder(DrivebaseConstants.RIGHT_CANCODER_ID); // CAN ID 6
-	}
-
-	@Override
-	public void periodic() {
-		// This method will be called once per scheduler run
+		/* Encoders */
+		frontLeftEncoder = leftFrontSparkMax.getEncoder();
+		backLeftEncoder = leftBackSparkMax.getEncoder();
+		frontRightEncoder = rightFrontSparkMax.getEncoder();
+		backRightEncoder = rightBackSparkMax.getEncoder();
 	}
 
 	public void drive(double leftSpeed, double rightSpeed) {
@@ -79,18 +90,29 @@ public class DrivebaseSubsystem extends SubsystemBase {
 		this.drive.tankDrive(leftSpeed, rightSpeed, squareInputs);
 	}
 
+	public void arcadeDrive(double power, double turningPower, boolean squareInputs) {
+		this.drive.arcadeDrive(power, turningPower, squareInputs);
+	}
+
+	public void arcadeDrive(double power, double turningPower) {
+		this.drive.arcadeDrive(power, turningPower);
+	}
+
 	public void resetEncoders() {
-		leftCanCoder.setPosition(0.0);
-		rightCanCoder.setPosition(0.0);
-		
+		frontLeftEncoder.setPosition(0);
+		backLeftEncoder.setPosition(0);
+		frontRightEncoder.setPosition(0);
+		backRightEncoder.setPosition(0);
 	}
 
 	public int getLeftEncoder() {
-		return (int) leftCanCoder.getPosition();
+		// Take average of both encoders
+		return (int) ((frontLeftEncoder.getPosition() + backLeftEncoder.getPosition()) / 2);
 	}
 
 	public int getRightEncoder() {
-		return (int) -rightCanCoder.getPosition();
+		// Take average of both encoders
+		return (int) ((frontRightEncoder.getPosition() + backRightEncoder.getPosition()) / 2);
 	}
 
 	/**
@@ -99,7 +121,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 	 * @return
 	 */
 	private static double encoderUnitsToInches(double encoderUnits) {
-		return encoderUnits * DrivebaseConstants.ENCODER_DISNATCE_PER_PULSE;
+		return encoderUnits * DrivebaseConstants.DISNATCE_PER_ENCODER_PULSE;
 	}
 
 	/**
@@ -134,5 +156,20 @@ public class DrivebaseSubsystem extends SubsystemBase {
 	 */
 	public void setMaxOutput(double maxOutput) {
 		drive.setMaxOutput(maxOutput);
+		this.maxOutput = maxOutput;
+	}
+
+	public double getMaxOutput() {
+		return this.maxOutput;
+	}
+
+	@Override
+	public void periodic() {
+		/* Update ShuffleBoard */
+		LEFT_ENCODER_ENTRY.setDouble(getLeftEncoder());
+		RIGHT_ENCODER_ENTRY.setDouble(getRightEncoder());
+		ENCODER_DISTANCE_ENTRY.setDouble(getAverageEncoderDistance());
+		NAVX_ANGLE_ENTRY.setDouble(Robot.navX.getAngle());
+		NAVX_RATE_ENTRY.setDouble(Robot.navX.getRate());
 	}
 }

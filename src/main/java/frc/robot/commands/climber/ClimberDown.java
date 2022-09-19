@@ -7,33 +7,26 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
+/**
+ * Forces the climber to come to the down position
+ */
 public class ClimberDown extends CommandBase {
-  /** Creates a new ClimberDown. */
-  public ClimberDown() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Robot.climb);
-  }
-  
+	public ClimberDown() {
+		addRequirements(Robot.climb);
+	}
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+	@Override
+	public void execute() {
+		Robot.climb.climb(-1.0);
+	}
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    Robot.climb.climb(-1.0);
-  }
+	@Override
+	public void end(boolean interrupted) {
+		Robot.climb.climb(0.0);
+	}
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    Robot.climb.climb(0.0);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return Robot.climb.bottomLimitReached();
-  }
+	@Override
+	public boolean isFinished() {
+		return Robot.climb.bottomLimitReached();
+	}
 }

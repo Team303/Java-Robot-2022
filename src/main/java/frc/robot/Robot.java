@@ -2,16 +2,15 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -21,300 +20,163 @@ import frc.robot.RobotMap.IOConstants;
 import frc.robot.RobotMap.LED;
 import frc.robot.autonomous.Autonomous;
 import frc.robot.autonomous.AutonomousProgram;
-import frc.robot.commands.climber.Climb;
-import frc.robot.commands.climber.ResetClimbEncoder;
+import frc.robot.commands.climber.DefaultClimb;
 import frc.robot.commands.drive.DefaultDrive;
-import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.DriveHold;
-import frc.robot.commands.drive.DriveToAngle;
 import frc.robot.commands.drive.DriveWait;
-import frc.robot.commands.drive.ZeroEncoders;
-import frc.robot.commands.led.LEDBounce;
+import frc.robot.commands.drive.SetDriveSpeed;
 import frc.robot.commands.led.LEDRainbowRotate;
-import frc.robot.commands.led.SetLEDColor;
+import frc.robot.commands.led.LEDSolidColor;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 
 public class Robot extends TimedRobot {
 
-  /* Define Robot Subsystems */
-  public static DrivebaseSubsystem drivebase = new DrivebaseSubsystem();
-  public static LEDSubsystem ledStrip = new LEDSubsystem();
-  public static ClimberSubsystem climb = new ClimberSubsystem();
+	/* Define Robot Subsystems */
+	public static final DrivebaseSubsystem drivebase = new DrivebaseSubsystem();
+	public static final LEDSubsystem ledStrip = new LEDSubsystem();
+	public static final ClimberSubsystem climb = new ClimberSubsystem();
 
-  /* RoboRio Sensors */
-  public static AHRS navX = new AHRS();
+	/* RoboRio Sensors */
+	public static final AHRS navX = new AHRS();
 
-  /* Robot IO Controls */
-  public static Joystick leftJoystick = new Joystick(
-    IOConstants.LEFT_JOYSTICK_ID
-  );
-  public static Joystick rightJoystick = new Joystick(
-    IOConstants.RIGHT_JOYSTICK_ID
-  );
-  public static XboxController operatorController = new XboxController(
-    IOConstants.OPERATOR_CONTROLLER
-  );
+	/* Robot IO Controls */
+	public static final Joystick leftJoystick = new Joystick(IOConstants.LEFT_JOYSTICK_ID);
+	public static final Joystick rightJoystick = new Joystick(IOConstants.RIGHT_JOYSTICK_ID);
+	public static final XboxController operatorController = new XboxController(IOConstants.OPERATOR_CONTROLLER);
 
-  /* Sendable for the color */
-  public static SendableChooser<Color> colorChooser = new SendableChooser<>();
+	/* Shufflebaord Tabs */
+	public static final ShuffleboardTab AUTO_TAB = Shuffleboard.getTab("Autonomous");
 
-  public static SendableChooser<Double> autoDelayChooser = new SendableChooser<>();
+	/* Shuffleboard Choosers */
+	public static SendableChooser<Double> autoDelayChooser = new SendableChooser<>();
 
-  static {
-    autoDelayChooser.addOption("0.25", 0.25D);
-    autoDelayChooser.addOption("0.5", 0.5D);
-    autoDelayChooser.addOption("0.75", 0.75D);
-    autoDelayChooser.addOption("1.0", 1.0D);
-    autoDelayChooser.addOption("1.25", 1.25D);
-    autoDelayChooser.addOption("1.5", 1.5D);
-    autoDelayChooser.addOption("1.75", 1.75D);
-    autoDelayChooser.addOption("2.0", 2.0D);
-    autoDelayChooser.addOption("2.25", 2.25D);
-    autoDelayChooser.addOption("2.5", 2.5D);
-    autoDelayChooser.addOption("2.75", 2.75D);
-    autoDelayChooser.addOption("3.0", 3.0D);
-    autoDelayChooser.setDefaultOption("0.0", 0.0D);
+	/* Robot alliance color */
+	public static Color allianceColor = DriverStation.getAlliance() == Alliance.Blue ? LED.RED : LED.BLUE;
 
-    Shuffleboard.getTab("Autonomous").add("Auto Start Delay", autoDelayChooser);
-  }
+	/**
+	 * Defines all the options for the autonomous delay
+	 */
+	static {
+		for (double i = 0; i < 15; i += 0.25)
+			autoDelayChooser.addOption(String.format("%.2f", i), i);
 
-  // The command configured to run during auto
-  private Command autonomousCommand;
+		autoDelayChooser.setDefaultOption("0.0", 0.0D);
 
-  @Override
-  public void robotInit() {
-    // Configure the button bindings
-    configureButtonBindings();
+		AUTO_TAB.add("Auto Start Delay", autoDelayChooser);
+	}
 
-    //Reset everything back to default
-    navX.calibrate();
-    navX.reset();
+	// The command configured to run during auto
+	private Command autonomousCommand;
 
-    drivebase.resetEncoders();
-    new ResetClimbEncoder();
+	@Override
+	public void robotInit() {
+		// Configure the joystick and controller bindings
+		configureButtonBindings();
 
-    // This runs if no other commands are scheduled (teleop)
-    drivebase.setDefaultCommand(new DefaultDrive());
-    climb.setDefaultCommand(new Climb());
+		// Reset everything back to default
+		navX.calibrate();
+		navX.reset();
 
-    // Could use DriverStation.getAlliance()
-    colorChooser.addOption("Red", RobotMap.LED.RED);
-    colorChooser.addOption("Blue", RobotMap.LED.BLUE);
-    colorChooser.setDefaultOption("Red", RobotMap.LED.RED);
-    Shuffleboard.getTab("Autonomous").add("Team Color Chooser", colorChooser);
+		// Reset motor encoders for all sub systems
+		drivebase.resetEncoders();
+		climb.resetEncoders();
 
-    /* Shuffleboard Stuff */
-    Autonomous.init();
-    AutonomousProgram.addAutosToShuffleboard();
+		// This runs if no other commands are scheduled (teleop)
+		drivebase.setDefaultCommand(new DefaultDrive());
+		climb.setDefaultCommand(new DefaultClimb());
+		ledStrip.setDefaultCommand(new LEDRainbowRotate());
 
-    Shuffleboard
-      .getTab("Commands")
-      .add("Drive 2ft (1/2 power)", new DriveDistance(24, 0.5));
-    Shuffleboard.getTab("Commands").add("Reset Encoders", new ZeroEncoders());
-    setSmartDashboard();
-  }
+		// Set limited drive speed for normal driving
+		drivebase.setMaxOutput(0.75);
 
-  private void setSmartDashboard() {
-    SmartDashboard.setDefaultNumber("Left Encoder", 0);
-    SmartDashboard.setDefaultNumber("Right Encoder", 0);
-    SmartDashboard.setDefaultNumber("Encoder Distance in Inches", 0);
+		/* Shuffleboard Stuff */
+		Autonomous.init();
+		AutonomousProgram.addAutosToShuffleboard();
+	}
 
-    SmartDashboard.setDefaultNumber("navX Angle", 0);
-    SmartDashboard.setDefaultNumber("navX Rate", 0);
-    SmartDashboard.setDefaultNumber("Angle Error", 0);
+	@Override
+	public void autonomousInit() {
+		// Chooses which auto we do from SmartDashboard
+		autonomousCommand = AutonomousProgram.autoChooser.getSelected().construct();
 
-    SmartDashboard.setDefaultNumber("Angle P value", DriveToAngle.kP);
-    SmartDashboard.setDefaultNumber("Angle I value", DriveToAngle.kI);
-    SmartDashboard.setDefaultNumber("Angle D value", DriveToAngle.kD);
+		// Schedule the selected autonomous command group
+		if (autonomousCommand != null) {
+			CommandScheduler.getInstance().schedule(
+					// To achieve the configured delay, use a sequential group that contains a wait
+					// command
+					new SequentialCommandGroup(
+							new DriveWait(autoDelayChooser.getSelected()),
+							autonomousCommand));
+		}
 
-    SmartDashboard.setDefaultNumber("Climb Speed", 0);
-    SmartDashboard.setDefaultNumber("Climber Encoder", 0);
-    SmartDashboard.setDefaultNumber("Climber RPM", 0);
-    SmartDashboard.setDefaultNumber("Climber Voltage Compensation", 0);
+		// Match LEDs color to team
+		CommandScheduler.getInstance().schedule(new LEDSolidColor(allianceColor));
+	}
 
-    SmartDashboard.setDefaultBoolean("Toggle Compressor", false);
-    SmartDashboard.putBoolean("Toggle Compressor", false);
-    SmartDashboard.setDefaultBoolean("Compressor State", false);
-    SmartDashboard.setDefaultNumber("Pneumatic Presure", 0);
-    SmartDashboard.setDefaultString("Left Solenoid", "Off");
-    SmartDashboard.setDefaultString("Right Solenoid", "Off");
+	@Override
+	public void teleopInit() {
+		// This makes sure that the autonomous stops running when teleop starts running.
+		if (autonomousCommand != null)
+			autonomousCommand.cancel();
 
-    SmartDashboard.setDefaultBoolean("Bottom Right LS", false);
-    SmartDashboard.setDefaultBoolean("Bottom Left LS", false);
-    SmartDashboard.setDefaultBoolean("Bottom LS's", false);
+		// Override whatever the brake switch is
+		climb.setNeutralMode(IdleMode.kBrake);
 
-    SmartDashboard.setDefaultBoolean("Top Right LS", false);
-    SmartDashboard.setDefaultBoolean("Top Left LS", false);
-    SmartDashboard.setDefaultBoolean("Top LS's", false);
-  }
+		// Match LEDs color to team
+		CommandScheduler.getInstance().schedule(new LEDSolidColor(allianceColor));
+	}
 
-  private void updateSmartDashbaord() {
-    SmartDashboard.putNumber("Left Encoder", drivebase.getLeftEncoder());
-    SmartDashboard.putNumber("Right Encoder", drivebase.getRightEncoder());
-    SmartDashboard.putNumber(
-      "Encoder Distance in Inches",
-      drivebase.getAverageEncoderDistance()
-    );
+	@Override
+	public void disabledInit() {
+		// Change LED color to signify disabled state
+		CommandScheduler.getInstance().schedule(new LEDSolidColor(LED.DISABLED_COLOR));
+	}
 
-    SmartDashboard.putNumber("navX Angle", navX.getAngle());
-    SmartDashboard.putNumber("navX Rate", navX.getRate());
-    SmartDashboard.putNumber("Angle Error", DriveToAngle.error);
+	@Override
+	public void disabledPeriodic() {
+		// Poll the brake switch to correctly set climber nuetral mode
+		climb.updateBrakeSwitch();
+	}
 
-    DriveToAngle.kP =
-      SmartDashboard.getNumber("Angle P value", DriveToAngle.kP);
-    DriveToAngle.kI =
-      SmartDashboard.getNumber("Angle I value", DriveToAngle.kI);
-    DriveToAngle.kD =
-      SmartDashboard.getNumber("Angle D value", DriveToAngle.kD);
+	private void configureButtonBindings() {
+		// While holding turbo button, increase drive speed to full power
+		new JoystickButton(rightJoystick, 2).whileHeld(new SetDriveSpeed(1));
 
-    SmartDashboard.putNumber("Climb Speed", -operatorController.getRightY());
-    SmartDashboard.putNumber("Climber Encoder", climb.encoderPosition());
-    SmartDashboard.putNumber("Climber RPM", climb.getRPMofClimber());
-    SmartDashboard.putNumber(
-      "Climber Voltage Compensation",
-      climb.getVoltageSpike()
-    );
+		// Drive fwd
+		new JoystickButton(rightJoystick, 3).whileHeld(new DriveHold(0.75));
+		new JoystickButton(rightJoystick, 5).whileHeld(new DriveHold(1));
 
-    SmartDashboard.putBoolean(
-      "Bottom Right LS",
-      climb.bottomRightLimitSwitch.get()
-    );
-    SmartDashboard.putBoolean(
-      "Bottom Left LS",
-      climb.bottomLeftLimitSwitch.get()
-    );
-    SmartDashboard.putBoolean("Bottom LS's", climb.bottomLimitReached());
+		// Drive back
+		new JoystickButton(rightJoystick, 6).whileHeld(new DriveHold(-1));
+		new JoystickButton(rightJoystick, 4).whileHeld(new DriveHold(-0.75));
 
-    SmartDashboard.putBoolean("Top Right LS", climb.topRightLimitSwitch.get());
-    SmartDashboard.putBoolean("Top Left LS", climb.topLeftLimitSwitch.get());
-    SmartDashboard.putBoolean("Top LS's", climb.topLimitReached());
-  }
+		// Rotation counter-clockwise
+		new JoystickButton(leftJoystick, 3).whileHeld(new DriveHold(-0.75, 0.75));
+		new JoystickButton(leftJoystick, 5).whileHeld(new DriveHold(-1, 1));
 
-  private void configureButtonBindings() {
-    // // Drive 4 inches when right trigger pressed
-    // new JoystickButton(rightJoystick, ButtonType.kTrigger.value)
-    // .whenPressed(new DriveDistance(24, 1));
+		// Rotation clockwise
+		new JoystickButton(leftJoystick, 6).whileHeld(new DriveHold(1, -1));
+		new JoystickButton(leftJoystick, 4).whileHeld(new DriveHold(0.75, -0.75));
+	}
 
-    /* Change LED strip colors for buttons 1-3 */
-    // new JoystickButton(rightJoystick, 5)
-    // 		.whenPressed(new SetLEDColor(new Color(255, 0, 0)));
+	/*
+	 * This Robot is configured to run with the WPILib CommandScheduler.
+	 * ⛔ Nothing should be handled in the below methods ⛔
+	 */
 
-    // new JoystickButton(rightJoystick, 2)
-    // 		.whenPressed(new SetLEDColor(new Color(0, 255, 0)));
-
-    // new JoystickButton(rightJoystick, 6)
-    // 		.whenPressed(new SetLEDColor(new Color(0, 0, 255)));
-
-    // // While holding the left trigger button, drive at half speed
-    // new JoystickButton(leftJoystick, ButtonType.kTrigger.value)
-    // 		.whenHeld(new LEDFade());
-
-    //run commands with joysticks
-    // new JoystickButton(leftJoystick, 4).whenPressed(new DriveToAngle(-45));
-    // new JoystickButton(leftJoystick, 6).whenPressed(new DriveToAngle(-90));
-    // new JoystickButton(leftJoystick, 2).whenPressed(new DriveToAngle(180));
-    // new JoystickButton(leftJoystick, 5).whenPressed(new DriveToAngle(90));
-    // new JoystickButton(leftJoystick, 3).whenPressed(new DriveToAngle(45));
-
-    // new JoystickButton(leftJoystick, 5).whenHeld(new ExtendIntake());
-    // new JoystickButton(leftJoystick, 6).whenHeld(new RetractIntake());
-
-    new JoystickButton(rightJoystick, 3).whileHeld(new DriveHold(.5));
-    new JoystickButton(rightJoystick, 5).whileHeld(new DriveHold(1));
-    new JoystickButton(rightJoystick, 6).whileHeld(new DriveHold(-1));
-    new JoystickButton(rightJoystick, 4).whileHeld(new DriveHold(-.5));
-
-    new JoystickButton(rightJoystick, 2).whileHeld(new DriveHold(.75));
-
-    //new JoystickButton(operatorController, 6).whenPressed(new ClimberDown());
-
-    //new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenHeld(new StartIntake());
-    //new JoystickButton(rightJoystick, ButtonType.kTrigger.value).whenHeld();
-    //wait until PID is finished
-    //new JoystickButton(leftJoystick, ButtonType.kTrigger.value).whenPressed(new DriveToAngle(180));
-
-  }
-
-  /*
-   * This Robot is configured to run with the WPILib CommandScheduler.
-   * ⛔ Nothing should be handled in the below methods ⛔
-   */
-
-  @Override
-  public void robotPeriodic() {
-    /*
-     * Runs the Scheduler. This is responsible for polling buttons, adding
-     * newly-scheduled
-     * commands, running already-scheduled commands, removing finished or
-     * interrupted commands,
-     * and running subsystem periodic() methods. This must be called from the
-     * robot's periodic
-     * block in order for anything in the Command-based framework to work.
-     */
-    CommandScheduler.getInstance().run();
-    updateSmartDashbaord();
-  }
-
-  @Override
-  public void autonomousInit() {
-    //Chooses which auto we do from SmartDashboard
-    autonomousCommand = AutonomousProgram.autoChooser.getSelected().construct();
-
-    // schedule the autonomous command (example)
-    if (autonomousCommand != null) {
-      new SequentialCommandGroup(
-        new DriveWait(autoDelayChooser.getSelected()),
-        autonomousCommand
-      )
-        .schedule();
-    }
-
-    // ledStrip.setDefaultCommand(new SetLEDColor(DriverStation.getAlliance() == Alliance.Blue ? blue : red));
-    new SetLEDColor(DriverStation.getAlliance() == Alliance.Blue ? LED.RED : LED.BLUE).initialize();
-  }
-
-  @Override
-  public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running.
-    if (autonomousCommand != null) {
-      autonomousCommand.cancel();
-    }
-
-    // new SetLEDColor(RobotMap.LED.TELEOP_COLOR).initialize();
-    new SetLEDColor(DriverStation.getAlliance() == Alliance.Blue ? LED.RED : LED.BLUE).initialize();
-    // ledStrip.setDefaultCommand(
-    //   new LEDLeftRight(
-    //     new Color(230 / 255D, 30 / 255D, 0 / 255D),
-    //     new Color(70D / 255, 0, 20D / 255)
-    //   )
-    // );
-
-    ledStrip.setDefaultCommand(new LEDRainbowRotate());
-
-    climb.setNeutralMode(IdleMode.kBrake);
-  }
-
-  @Override
-  public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-
-    new SetLEDColor(new Color(255, 255, 0)).initialize();
-  }
-
-  @Override
-  public void disabledInit() {
-    new SetLEDColor(RobotMap.LED.DISABLED_COLOR).initialize();
-  }
-
-  @Override
-  public void disabledPeriodic() {
-    // Toggle Switch
-    climb.setNeutralMode(
-      climb.neutralToggleSwitch.get() ? IdleMode.kBrake : IdleMode.kCoast
-    );
-  }
+	@Override
+	public void robotPeriodic() {
+		/*
+		 * Runs the Scheduler. This is responsible for polling buttons, adding
+		 * newly-scheduled
+		 * commands, running already-scheduled commands, removing finished or
+		 * interrupted commands,
+		 * and running subsystem periodic() methods. This must be called from the
+		 * robot's periodic
+		 * block in order for anything in the Command-based framework to work.
+		 */
+		CommandScheduler.getInstance().run();
+	}
 }

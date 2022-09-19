@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
@@ -15,74 +18,93 @@ import com.revrobotics.RelativeEncoder;
 import frc.robot.RobotMap.Climber;
 import frc.robot.util.GroundedDigitalInput;
 
-
 public class ClimberSubsystem extends SubsystemBase {
-  
-  private final CANSparkMax climbMotor;
-  private final RelativeEncoder climbEncoder;
- 
-  // NOTE: Spark max has built in limit swtich capabilities but im stupid and didn't know that
-  public final GroundedDigitalInput bottomLeftLimitSwitch; 
-  public final GroundedDigitalInput bottomRightLimitSwitch; 
-  public final GroundedDigitalInput topRightLimitSwitch; 
-  public final GroundedDigitalInput topLeftLimitSwitch; 
 
-  public final GroundedDigitalInput neutralToggleSwitch; 
+	/* ShuffleBoard */
+	public static final ShuffleboardTab CLIMBER_TAB = Shuffleboard.getTab("Climber");
 
-  /** Creates a new ClimberSubsystem. */
-  public ClimberSubsystem() {
-    
-    climbMotor = new CANSparkMax(Climber.CLIMB_PORT_ID, MotorType.kBrushless);
-    
-    climbMotor.setInverted(Climber.CLIMB_MOTOR_INVERTED);
+	private static final NetworkTableEntry CLIMBER_ENCODER = CLIMBER_TAB.add("Climber Encoder", 0).getEntry();
+	private static final NetworkTableEntry CLIMBER_RPM = CLIMBER_TAB.add("Climber RPM", 0).getEntry();
+	private static final NetworkTableEntry TOP_LIMIT_SWITCH = CLIMBER_TAB.add("Top Limit Switch", false).getEntry();
+	private static final NetworkTableEntry BOTTOM_LIMIT_SWITCH = CLIMBER_TAB.add("Bottom Limit Switch", false)
+			.getEntry();
 
-    climbMotor.setIdleMode(IdleMode.kBrake);
-    
-    
-    climbEncoder = climbMotor.getEncoder();
+	/* Motors */
+	private final CANSparkMax climbMotor;
+	private final RelativeEncoder climbEncoder;
 
-    bottomLeftLimitSwitch =  new GroundedDigitalInput(Climber.BOTTOM_LEFT_LIMIT_SWITCH);
-    bottomRightLimitSwitch =  new GroundedDigitalInput(Climber.BOTTOM_RIGHT_LIMIT_SWITCH);
-    topRightLimitSwitch =  new GroundedDigitalInput(Climber.TOP_RIGHT_LIMIT_SWITCH);
-    topLeftLimitSwitch =  new GroundedDigitalInput(Climber.TOP_LEFT_LIMIT_SWITCH);
+	/* Limit Switches */
+	public final GroundedDigitalInput bottomLeftLimitSwitch;
+	public final GroundedDigitalInput bottomRightLimitSwitch;
+	public final GroundedDigitalInput topRightLimitSwitch;
+	public final GroundedDigitalInput topLeftLimitSwitch;
 
-    neutralToggleSwitch =  new GroundedDigitalInput(Climber.NEUTRAL_TOGGLE_SWITCH);
-  }
+	/* Brake toggle */
+	public final GroundedDigitalInput neutralToggleSwitch;
 
-  public void setNeutralMode(IdleMode mode) {
-      climbMotor.setIdleMode(mode);
-  }
+	/** Creates a new ClimberSubsystem. */
+	public ClimberSubsystem() {
 
-  public void climb(double speed) {
+		climbMotor = new CANSparkMax(Climber.CLIMB_PORT_ID, MotorType.kBrushless);
 
-    if ((bottomLimitReached() && speed < 0) || (topLimitReached() && speed > 0)) {
-      climbMotor.set(0);
-      return;
-    }
-    climbMotor.set(speed);
-  } 
+		climbMotor.setInverted(Climber.CLIMB_MOTOR_INVERTED);
 
-  public boolean bottomLimitReached(){
-    return bottomLeftLimitSwitch.get() || bottomRightLimitSwitch.get();
-  }
+		climbMotor.setIdleMode(IdleMode.kBrake);
 
-  public boolean topLimitReached(){
-    return topLeftLimitSwitch.get() || topRightLimitSwitch.get();
-  }
+		climbEncoder = climbMotor.getEncoder();
 
-  public void resetEncoders(){
-    climbEncoder.setPosition(0.0);
-  }
-   
-  public double encoderPosition() {
-    return climbEncoder.getPosition();
-  }
+		bottomLeftLimitSwitch = new GroundedDigitalInput(Climber.BOTTOM_LEFT_LIMIT_SWITCH);
+		bottomRightLimitSwitch = new GroundedDigitalInput(Climber.BOTTOM_RIGHT_LIMIT_SWITCH);
+		topRightLimitSwitch = new GroundedDigitalInput(Climber.TOP_RIGHT_LIMIT_SWITCH);
+		topLeftLimitSwitch = new GroundedDigitalInput(Climber.TOP_LEFT_LIMIT_SWITCH);
 
-  public double getRPMofClimber(){
-    return climbEncoder.getCountsPerRevolution();
-  }
+		neutralToggleSwitch = new GroundedDigitalInput(Climber.NEUTRAL_TOGGLE_SWITCH);
+	}
 
-  public double getVoltageSpike(){
-    return climbMotor.getVoltageCompensationNominalVoltage();
-  }
+	public void setNeutralMode(IdleMode mode) {
+		climbMotor.setIdleMode(mode);
+	}
+
+	public void climb(double speed) {
+		if ((bottomLimitReached() && speed < 0) || (topLimitReached() && speed > 0)) {
+			climbMotor.set(0);
+			return;
+		}
+		climbMotor.set(speed);
+	}
+
+	public boolean bottomLimitReached() {
+		return bottomLeftLimitSwitch.get() || bottomRightLimitSwitch.get();
+	}
+
+	public boolean topLimitReached() {
+		return topLeftLimitSwitch.get() || topRightLimitSwitch.get();
+	}
+
+	public void resetEncoders() {
+		climbEncoder.setPosition(0.0);
+	}
+
+	public double encoderPosition() {
+		return climbEncoder.getPosition();
+	}
+
+	public double getRPMofClimber() {
+		return climbEncoder.getCountsPerRevolution();
+	}
+
+	/**
+	 * Called periodically during disabled to handle the break switch
+	 */
+	public void updateBrakeSwitch() {
+		setNeutralMode(neutralToggleSwitch.get() ? IdleMode.kBrake : IdleMode.kCoast);
+	}
+
+	@Override
+	public void periodic() {
+		CLIMBER_ENCODER.setNumber(encoderPosition());
+		CLIMBER_RPM.setNumber(getRPMofClimber());
+		TOP_LIMIT_SWITCH.setBoolean(topLimitReached());
+		BOTTOM_LIMIT_SWITCH.setBoolean(bottomLimitReached());
+	}
 }

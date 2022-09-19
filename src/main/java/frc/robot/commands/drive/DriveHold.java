@@ -9,13 +9,20 @@ import frc.robot.Robot;
 
 public class DriveHold extends CommandBase {
 
-	private final double speed;
+	private final double leftSpeed;
+	private final double rightSpeed;
 
 	public DriveHold(double speed) {
-		this.speed = speed;
+		this(speed, speed);
+	}
+
+	public DriveHold(double leftSpeed, double rightSpeed) {
+		this.leftSpeed = leftSpeed;
+		this.rightSpeed = rightSpeed;
+		
 		addRequirements(Robot.drivebase);
 	}
-	
+
 	@Override
 	public void initialize() {
 		Robot.drivebase.resetEncoders();
@@ -23,7 +30,7 @@ public class DriveHold extends CommandBase {
 
 	@Override
 	public void execute() {
-		Robot.drivebase.drive(speed, speed, false);
+		Robot.drivebase.drive(leftSpeed, rightSpeed, false);
 	}
 
 }

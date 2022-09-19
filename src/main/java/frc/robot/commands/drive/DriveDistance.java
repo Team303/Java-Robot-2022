@@ -3,56 +3,43 @@ package frc.robot.commands.drive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
+/**
+ * Attempts to drive the specified distance without ensuring
+ * that the robot is driving perfectly straight.
+ * 
+ * Instead, the average of both encoders is used to determine the
+ * traveled distance
+ */
 public class DriveDistance extends CommandBase {
 
-    private final double distance;
-    private final double speed;
+	private final double distance;
+	private final double speed;
 
-    /**
-     * Creates a new DriveDistance.
-     *
-     * @param inches The number of inches the robot will drive
-     * @param speed  The speed at which the robot will drive (0-1)
-     */
-    public DriveDistance(double inches, double speed) {
-        //initialize varibles
-        this.distance = inches;
-        this.speed = speed;
-        addRequirements(Robot.drivebase);
-    }
+	/**
+	 * @param inches The number of inches the robot will drive
+	 * @param speed  The speed at which the robot will drive (0-1)
+	 */
+	public DriveDistance(double inches, double speed) {
+		this.distance = inches;
+		this.speed = speed;
 
-    @Override
-    public void initialize() {
-        //resets everything for accurate readings 
-        Robot.drivebase.resetEncoders();
-        Robot.navX.reset();
-    }
+		addRequirements(Robot.drivebase);
+	}
 
-    @Override
-    public void execute() {
-        //error is how much you are turning (aka: what you don't want)
-        //this is used to correct yourself later
-		double error = 1;// -Robot.gyro.getRate();// / 360;
+	@Override
+	public void initialize() {
+		Robot.drivebase.resetEncoders();
+		Robot.navX.reset();
+	}
 
-        // System.out.println("Rate: " + Robot.gyro.getRate());
-        // System.out.println("Error: " + error);
+	@Override
+	public void execute() {
+		Robot.drivebase.arcadeDrive(speed, 0, false);
+	}
 
-        // double error = 1;
-
-        //uses speed varible multiplied by error to fix any change and keep you going straight
-        Robot.drivebase.drive(speed * error, speed *  error, false);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        Robot.drivebase.resetEncoders();
-        Robot.navX.reset();
-    }
-
-    @Override
-    public boolean isFinished() {
-        //check if you have went the distance based on encoders
-        //TODO change this to only right encoder if we can't fix left encoder
-        return Math.abs(Robot.drivebase.getAverageEncoderDistance()) >= distance;
-    }
+	@Override
+	public boolean isFinished() {
+		// Check if the robot has moved at least the specified distance
+		return Math.abs(Robot.drivebase.getAverageEncoderDistance()) >= distance;
+	}
 }

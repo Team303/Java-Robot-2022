@@ -6,13 +6,11 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class SetLEDColor extends CommandBase {
-	//define varible
+public class LEDSolidColor extends CommandBase {
 	Color color;
 
-	public SetLEDColor(Color color) {
+	public LEDSolidColor(Color color) {
 		addRequirements(Robot.ledStrip);
-		//initialize varible
 		this.color = color;
 	}
 
@@ -24,5 +22,10 @@ public class SetLEDColor extends CommandBase {
 		}
 		// Send color data to LEDSubsytem
 		Robot.ledStrip.writeData();
+	}
+
+	@Override
+	public boolean runsWhenDisabled() {
+		return true;
 	}
 }

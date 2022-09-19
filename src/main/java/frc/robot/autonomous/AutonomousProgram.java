@@ -6,6 +6,7 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 
 public class AutonomousProgram {
 	// A chooser for autonomous commands
@@ -78,7 +79,7 @@ public class AutonomousProgram {
 		autoChooser.setDefaultOption(DO_NOTHING.getName(), DO_NOTHING);
 
 		// Put the chooser on the dashboard
-		Shuffleboard.getTab("Autonomous").add("Autonomous Selector", autoChooser);
+		Robot.AUTO_TAB.add("Autonomous Selector", autoChooser);
 	}
 
 }

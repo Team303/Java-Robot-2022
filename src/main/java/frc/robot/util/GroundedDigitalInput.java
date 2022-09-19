@@ -6,16 +6,19 @@ package frc.robot.util;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
-/** Add your docs here. */
+/**
+ * Extended DigitalInput class that inverts the output to work with grounded
+ * limit switches
+ */
 public class GroundedDigitalInput extends DigitalInput {
 
-    public GroundedDigitalInput(int channel) {
-        super(channel);
-    }
+	public GroundedDigitalInput(int channel) {
+		super(channel);
+	}
 
-    @Override
-    public boolean get() {
-        return !super.get();
-    }
-    
+	@Override
+	public boolean get() {
+		return !super.get();
+	}
+
 }

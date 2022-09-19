@@ -9,53 +9,55 @@ import frc.robot.RobotMap;
 
 public class LEDFlash extends CommandBase {
 
-    //Declare Varibles
-    Timer timer;
-    boolean isPrimary = true;
-    double period = 0.5; // 500 milliseconds
+	private Timer timer;
+	private boolean isPrimary = true;
+	private double period;
 
-    public LEDFlash(double period) {
-        addRequirements(Robot.ledStrip);
+	public LEDFlash(double period) {
+		addRequirements(Robot.ledStrip);
 
-        //initialize varibles
-        timer = new Timer();
-        this.period = period;
-    }
+		timer = new Timer();
+		this.period = period;
+	}
 
-    public void initialize() {
-        timer.start();
-    }
+	public void initialize() {
+		timer.start();
+	}
 
-    public void execute() {
-        //check the current time
-        double time = timer.get();
-        
-        //if the time is less then the period do nothing / keep same color
-        if (time <= period)
-            return;
-        
-        //else reset the timer and turn it back on
-        timer.reset();
-        timer.start();
+	public void execute() {
+		// check the current time
+		double time = timer.get();
 
-        //change the color
-        isPrimary = !isPrimary;
+		// if the time is less then the period do nothing / keep same color
+		if (time <= period)
+			return;
 
+		// else reset the timer and turn it back on
+		timer.reset();
+		timer.start();
 
-        for (var i = 0; i < Robot.ledStrip.ledBuffer.getLength(); i++) {
-            //a fancy way of saying if isPrimary is true use Flash_Primary color else use Flash_Secondary color
-            Color ledColor = isPrimary ? RobotMap.LED.FLASH_PRIMARY : RobotMap.LED.FLASH_SECONDARY;
-            Robot.ledStrip.ledBuffer.setLED(i, ledColor);
-        }
+		// change the color
+		isPrimary = !isPrimary;
 
-        // Send the data to LEDSubsytem 
+		for (var i = 0; i < Robot.ledStrip.ledBuffer.getLength(); i++) {
+			// a fancy way of saying if isPrimary is true use Flash_Primary color else use
+			// Flash_Secondary color
+			Color ledColor = isPrimary ? RobotMap.LED.FLASH_PRIMARY : RobotMap.LED.FLASH_SECONDARY;
+			Robot.ledStrip.ledBuffer.setLED(i, ledColor);
+		}
+
+		// Send the data to LEDSubsytem
 		Robot.ledStrip.writeData();
-    }
+	}
 
-    public void end(boolean interupted) {
-        //stop the timer so it doesn't keep going
-        timer.stop();
-        timer.reset();
-    }
+	public void end(boolean interupted) {
+		// stop the timer so it doesn't keep going
+		timer.stop();
+		timer.reset();
+	}
 
+	@Override
+	public boolean runsWhenDisabled() {
+		return true;
+	}
 }
