@@ -94,6 +94,9 @@ public class Robot extends TimedRobot {
 		/* Shuffleboard Stuff */
 		Autonomous.init();
 		AutonomousProgram.addAutosToShuffleboard();
+
+		// Start Camera
+		CameraServer.startAutomaticCapture();
 	}
 
 	@Override

@@ -70,7 +70,7 @@ public class LEDSubsystem extends SubsystemBase {
 		if (arduino == null)
 			return;
 
-		// Create a byte vuffer that we will send over the wire
+		// Create a byte buffer that we will send over the wire
 		byte[] buff = new byte[LED.BUFFER_LENGTH * 3];
 
 		for (var i = 0; i < ledBuffer.getLength(); i++) {
@@ -79,7 +79,7 @@ public class LEDSubsystem extends SubsystemBase {
 			buff[i * 3 + 0] = (byte) ledBuffer.getLED(i).blue;
 		}
 
-		// Write the buye buffer and force the buffer to flush its contents
+		// Write the byte buffer and force the buffer to flush its contents
 		arduino.write(buff, buff.length);
 		arduino.flush();
 	}
