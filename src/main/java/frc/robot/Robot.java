@@ -3,6 +3,7 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
