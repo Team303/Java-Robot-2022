@@ -1,66 +1,35 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
+import java.lang.Math;
+
+import frc.robot.RobotMap.Swerve;
+import frc.robot.Robot;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
+public class SwerveSubsystem extends SubsystemBase {
 
-public class SwerveSubsystem {
+    ChassisSpeeds speeds;
 
-    public class SwerveDriveWheel {
+    Translation2d m_frontLeftLocation;
+    Translation2d m_backLeftLocation;
+    Translation2d m_frontRightLocation;
+    Translation2d m_backRightLocation;
 
-        private final PIDController directionController;
-        private final CANSparkMax directionMotor;
-        private final CANSparkMax speedMotor;
-        private final RelativeEncoder directionEncoder;
+    SwerveDriveKinematics m_kinematics;
 
-        private static final double encoderToAngle = 360/42;
-        private double kp, ki, kd;
-
-        public SwerveDriveWheel(double kp, double ki, double kd, CANSparkMax directionM, CANSparkMax speedM, RelativeEncoder directionE){
-            this.kp = kp;
-            this.ki = ki;
-            this.kd = kd;
-
-            directionController = new PIDController(this.kp, this.ki, this.kd);
-            directionMotor = directionM;
-            directionEncoder = directionE;
-            speedMotor = speedM;
-        }
-
-        public void setDirection(double setpoint){
-            directionMotor.set(directionController.calculate(directionEncoder.getPosition() * encoderToAngle % 360, 
-                closestAngle(setpoint, directionEncoder.getPosition() * encoderToAngle)));
-        }
-
-        public void setSpeed(double speed){
-            speedMotor.set(speed);
-        }
-
-        public double getAngle(){
-            return directionEncoder.getPosition() * encoderToAngle;
-        }
-
-        public void setAngle(double position){
-            directionEncoder.setPosition(position);
-        }
-
-        public void resetAngle(){
-            setAngle(0);
-        }
-
-        private double closestAngle(double a, double b){
-            double dir = (b % 360.0) - (a % 360.0);
-
-            if (Math.abs(dir) > 180.0)
-            {
-                    dir = -(Math.signum(dir) * 360.0) + dir;
-            }
-            return dir;
-        }
-    }
+    SwerveModuleState[] moduleStates;
 
     private final SwerveSubsystem.SwerveDriveWheel LEFT_FRONT_DRIVE_WHEEL;
     private final SwerveSubsystem.SwerveDriveWheel LEFT_BACK_DRIVE_WHEEL;
@@ -82,8 +51,64 @@ public class SwerveSubsystem {
     private final RelativeEncoder RIGHT_FRONT_DRIVE_SPEED_ENCODER;
     private final RelativeEncoder RIGHT_BACK_DRIVE_SPEED_ENCODER;
 
+    public class SwerveDriveWheel{
+
+        private final PIDController directionController;
+        private final CANSparkMax directionMotor;
+        private final CANSparkMax speedMotor;
+        private final RelativeEncoder directionEncoder;
+        private SwerveModuleState mState;
+
+        private double kp, ki, kd;
+
+        public SwerveDriveWheel(double kp, double ki, double kd, CANSparkMax directionMotor, CANSparkMax speedMotor, RelativeEncoder directionEncoder, SwerveModuleState mState){
+
+
+            this.kp = kp;
+            this.ki = ki;
+            this.kd = kd;
+
+            directionController = new PIDController(this.kp, this.ki, this.kd);
+
+            this.mState = mState;
+            this.directionMotor = directionMotor;
+            this.speedMotor = speedMotor;
+            this.directionEncoder = directionEncoder;
+
+
+        }
+
+        public void setSwerveState(SwerveModuleState mState){
+            this.mState = mState;
+            this.speedMotor.set(this.mState.speedMetersPerSecond / 10);
+            this.directionMotor.set(directionController.calculate(directionEncoder.getPosition(), this.mState.angle.getRadians()));
+        }
+
+        public double getSpeed(){
+            return mState.speedMetersPerSecond;
+        }
+
+        public Rotation2d getAngle(){
+            return mState.angle;
+        }
+    }
+
     public SwerveSubsystem(){
 
+        m_frontLeftLocation = new Translation2d(Swerve.X_FROM_CENTER, Swerve.Y_FROM_CENTER);
+        m_frontRightLocation = new Translation2d(Swerve.X_FROM_CENTER, -Swerve.Y_FROM_CENTER);
+        m_backLeftLocation = new Translation2d(-Swerve.X_FROM_CENTER, Swerve.Y_FROM_CENTER);
+        m_backRightLocation = new Translation2d(-Swerve.X_FROM_CENTER, -Swerve.Y_FROM_CENTER);
+
+        // Creating my kinematics object using the module locations
+        m_kinematics = new SwerveDriveKinematics(
+            m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation
+        );
+
+        speeds = new ChassisSpeeds();
+
+        moduleStates = m_kinematics.toSwerveModuleStates(speeds);
+        
         LEFT_FRONT_DRIVE_DIRECTION_MOTOR = new CANSparkMax(0, MotorType.kBrushed);
         LEFT_BACK_DRIVE_DIRECTION_MOTOR = new CANSparkMax(1, MotorType.kBrushed);
         RIGHT_FRONT_DRIVE_DIRECTION_MOTOR = new CANSparkMax(2, MotorType.kBrushed);
@@ -102,25 +127,36 @@ public class SwerveSubsystem {
         LEFT_FRONT_DRIVE_WHEEL = new SwerveSubsystem.SwerveDriveWheel(0, 0, 0, 
             LEFT_FRONT_DRIVE_DIRECTION_MOTOR, 
             LEFT_FRONT_DRIVE_SPEED_MOTOR, 
-            LEFT_FRONT_DRIVE_DIRECTION_MOTOR.getEncoder());
+            LEFT_FRONT_DRIVE_DIRECTION_MOTOR.getEncoder(), 
+            moduleStates[0]);
 
         LEFT_BACK_DRIVE_WHEEL = new SwerveSubsystem.SwerveDriveWheel(0, 0, 0, 
             LEFT_BACK_DRIVE_DIRECTION_MOTOR, 
             LEFT_FRONT_DRIVE_SPEED_MOTOR, 
-            LEFT_BACK_DRIVE_DIRECTION_MOTOR.getEncoder());
+            LEFT_BACK_DRIVE_DIRECTION_MOTOR.getEncoder(), 
+            moduleStates[1]);
 
         RIGHT_FRONT_DRIVE_WHEEL = new SwerveSubsystem.SwerveDriveWheel(0, 0, 0, 
             RIGHT_FRONT_DRIVE_DIRECTION_MOTOR, 
             LEFT_FRONT_DRIVE_SPEED_MOTOR, 
-            RIGHT_FRONT_DRIVE_DIRECTION_MOTOR.getEncoder());
+            RIGHT_FRONT_DRIVE_DIRECTION_MOTOR.getEncoder(), 
+            moduleStates[2]);
 
         RIGHT_BACK_DRIVE_WHEEL = new SwerveSubsystem.SwerveDriveWheel(0, 0, 0, 
             RIGHT_BACK_DRIVE_DIRECTION_MOTOR, 
             LEFT_FRONT_DRIVE_SPEED_MOTOR, 
-            RIGHT_BACK_DRIVE_DIRECTION_MOTOR.getEncoder());
+            RIGHT_BACK_DRIVE_DIRECTION_MOTOR.getEncoder(), 
+            moduleStates[3]);
+        
     }
 
-
-
-
+    public void setSwerveState(double vxMetersPerSecond, double vyMetersPerSecond, double omegaRadiansPerSecond, Rotation2d robotAngle){
+        
+        moduleStates = m_kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(
+            vxMetersPerSecond,
+            vyMetersPerSecond, 
+            omegaRadiansPerSecond, 
+            robotAngle));
+        
+    }
 }

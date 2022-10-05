@@ -45,6 +45,11 @@ public final class RobotMap {
 		}
 	}
 
+	public static final class Swerve{
+		public static final double X_FROM_CENTER = 0.381;
+		public static final double Y_FROM_CENTER = 0.381;
+	}
+
 	public static final class Climber {
 
 		public static final int CLIMB_PORT_ID = 7;
