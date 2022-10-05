@@ -1,9 +1,6 @@
 package frc.robot.subsystems;
 
-import java.lang.Math;
-
 import frc.robot.RobotMap.Swerve;
-import frc.robot.Robot;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -12,7 +9,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -104,24 +100,20 @@ public class SwerveSubsystem extends SubsystemBase {
         m_kinematics = new SwerveDriveKinematics(
             m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation
         );
-
-        speeds = new ChassisSpeeds();
-
-        moduleStates = m_kinematics.toSwerveModuleStates(speeds);
         
-        LEFT_FRONT_DRIVE_DIRECTION_MOTOR = new CANSparkMax(0, MotorType.kBrushed);
-        LEFT_BACK_DRIVE_DIRECTION_MOTOR = new CANSparkMax(1, MotorType.kBrushed);
-        RIGHT_FRONT_DRIVE_DIRECTION_MOTOR = new CANSparkMax(2, MotorType.kBrushed);
-        RIGHT_BACK_DRIVE_DIRECTION_MOTOR = new CANSparkMax(3, MotorType.kBrushed);
+        LEFT_FRONT_DRIVE_DIRECTION_MOTOR = new CANSparkMax(0, MotorType.kBrushless);
+        RIGHT_FRONT_DRIVE_DIRECTION_MOTOR = new CANSparkMax(2, MotorType.kBrushless);
+        LEFT_BACK_DRIVE_DIRECTION_MOTOR = new CANSparkMax(1, MotorType.kBrushless);
+        RIGHT_BACK_DRIVE_DIRECTION_MOTOR = new CANSparkMax(3, MotorType.kBrushless);
 
-        LEFT_FRONT_DRIVE_SPEED_MOTOR = new CANSparkMax(4, MotorType.kBrushed);
-        LEFT_BACK_DRIVE_SPEED_MOTOR = new CANSparkMax(5, MotorType.kBrushed);
-        RIGHT_FRONT_DRIVE_SPEED_MOTOR = new CANSparkMax(6, MotorType.kBrushed);
-        RIGHT_BACK_DRIVE_SPEED_MOTOR = new CANSparkMax(7, MotorType.kBrushed);
+        LEFT_FRONT_DRIVE_SPEED_MOTOR = new CANSparkMax(4, MotorType.kBrushless);
+        RIGHT_FRONT_DRIVE_SPEED_MOTOR = new CANSparkMax(6, MotorType.kBrushless);
+        LEFT_BACK_DRIVE_SPEED_MOTOR = new CANSparkMax(5, MotorType.kBrushless);
+        RIGHT_BACK_DRIVE_SPEED_MOTOR = new CANSparkMax(7, MotorType.kBrushless);
 
         LEFT_FRONT_DRIVE_SPEED_ENCODER = LEFT_FRONT_DRIVE_SPEED_MOTOR.getEncoder();
-        LEFT_BACK_DRIVE_SPEED_ENCODER = LEFT_BACK_DRIVE_SPEED_MOTOR.getEncoder();
         RIGHT_FRONT_DRIVE_SPEED_ENCODER = RIGHT_FRONT_DRIVE_SPEED_MOTOR.getEncoder();
+        LEFT_BACK_DRIVE_SPEED_ENCODER = LEFT_BACK_DRIVE_SPEED_MOTOR.getEncoder();
         RIGHT_BACK_DRIVE_SPEED_ENCODER = RIGHT_BACK_DRIVE_SPEED_MOTOR.getEncoder();
 
         LEFT_FRONT_DRIVE_WHEEL = new SwerveSubsystem.SwerveDriveWheel(0, 0, 0, 
@@ -157,6 +149,11 @@ public class SwerveSubsystem extends SubsystemBase {
             vyMetersPerSecond, 
             omegaRadiansPerSecond, 
             robotAngle));
+
+        LEFT_FRONT_DRIVE_WHEEL.setSwerveState(moduleStates[0]);
+        RIGHT_FRONT_DRIVE_WHEEL.setSwerveState(moduleStates[1]);
+        LEFT_BACK_DRIVE_WHEEL.setSwerveState(moduleStates[2]);
+        RIGHT_BACK_DRIVE_WHEEL.setSwerveState(moduleStates[3]);
         
     }
 }
