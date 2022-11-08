@@ -45,9 +45,44 @@ public final class RobotMap {
 		}
 	}
 
-	public static final class Swerve{
-		public static final double X_FROM_CENTER = 0.381;
-		public static final double Y_FROM_CENTER = 0.381;
+	public static final class Swerve {
+
+		// Length and Width of robot in inches
+		public static final double L = 25;
+		public static final double W = 23;
+	
+		// PIDF Variables
+		public static final double kP = 0.02;
+		public static final double kI = 0.0;
+		public static final double kD = 0.0;
+		public static final double kF = 0.0;
+		
+		// Quadrature Encoder Ticks per Rotation
+		public static final int QUAD_COUNTS_PER_ROT = 1658;
+	
+		// Talon SRX Turn Motor CAN ID
+		public static final int frontLeftTurnTalonID = 31;
+		public static final int frontRightTurnTalonID = 41;
+		public static final int backLeftTurnTalonID = 11;
+		public static final int backRightTurnTalonID = 21;
+	
+		// IDs for Drive Motors
+		public static final int frontLeftDriveID = 32;
+		public static final int frontRightDriveID = 42;
+		public static final int backLeftDriveID = 0;
+		public static final int backRightDriveID = 22;
+	
+		// Analog Encoder ID
+		public static final int frontLeftEncoderID = 0;
+		public static final int frontRightEncoderID = 1;
+		public static final int backLeftEncoderID = 2;
+		public static final int backRightEncoderID = 3;
+	
+		// Offset of analog to make encoders face forward
+		public static final int frontLeftEncoderOffset = 1850;
+		public static final int frontRightEncoderOffset = 3675;
+		public static final int backLeftEncoderOffset = 550;
+		public static final int backRightEncoderOffset = 1600;
 	}
 
 	public static final class Climber {

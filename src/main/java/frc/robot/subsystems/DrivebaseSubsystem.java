@@ -49,8 +49,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
 	public DrivebaseSubsystem() {
 		/* Left Motors */
-		leftFrontSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_FRONT_SPARK_ID, MotorType.kBrushed);
-		leftBackSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_BACK_SPARK_ID, MotorType.kBrushed);
+		leftFrontSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_FRONT_SPARK_ID, MotorType.kBrushless);
+		leftBackSparkMax = new CANSparkMax(DrivebaseConstants.LEFT_BACK_SPARK_ID, MotorType.kBrushless);
 
 		leftFrontSparkMax.setIdleMode(IdleMode.kBrake);
 		leftBackSparkMax.setIdleMode(IdleMode.kBrake);
@@ -61,8 +61,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
 		leftMotors = new MotorControllerGroup(leftFrontSparkMax, leftBackSparkMax);
 
 		/* Right Motors */
-		rightFrontSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_FRONT_SPARK_ID, MotorType.kBrushed);
-		rightBackSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_BACK_SPARK_ID, MotorType.kBrushed);
+		rightFrontSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_FRONT_SPARK_ID, MotorType.kBrushless);
+		rightBackSparkMax = new CANSparkMax(DrivebaseConstants.RIGHT_BACK_SPARK_ID, MotorType.kBrushless);
 
 		rightFrontSparkMax.setIdleMode(IdleMode.kBrake);
 		rightBackSparkMax.setIdleMode(IdleMode.kBrake);
