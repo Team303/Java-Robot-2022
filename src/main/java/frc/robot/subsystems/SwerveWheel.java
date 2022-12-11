@@ -7,7 +7,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import com.revrobotics.CANSparkMax;
-import viking.controllers.SwerveWheelDrive;
 
 import frc.robot.RobotMap.Swerve;
 

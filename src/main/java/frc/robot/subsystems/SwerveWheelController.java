@@ -1,12 +1,9 @@
 package frc.robot.subsystems;
 
-import frc.robot.subsystems.SwerveWheel;
 import frc.robot.RobotMap.Swerve;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import viking.controllers.SwerveWheelDrive;
-import viking.controllers.SwerveWheelDrive.SwerveWheelDriveType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.kauailabs.navx.frc.AHRS;
